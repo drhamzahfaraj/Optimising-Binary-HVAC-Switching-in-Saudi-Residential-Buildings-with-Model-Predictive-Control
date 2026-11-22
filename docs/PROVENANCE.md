@@ -107,7 +107,7 @@ the `code/results → ../results` link and the original-path link).
 
 ## 3. Check result
 
-`python3 docs/provenance_check.py` on this release: **EXTERNAL, CITED** 4, **NOT IN A RESULT FILE** 2, **OK** 850, **n/a** 2 of 858 mapped values.
+`python3 docs/provenance_check.py` on this release: **EXTERNAL, CITED** 4, **NOT IN A RESULT FILE** 2, **OK** 1131, **n/a** 2 of 1139 mapped values.
 
 Values that are not a plain match (pending, not in a result file, cross-references, or mismatches):
 
@@ -549,15 +549,6 @@ Values that are not a plain match (pending, not in a result file, cross-referenc
 | F4 Taif: resolution | n.r. | `... resolution` | 'resolved' iff |d_pooled| >= 3 points and the test family is significant | OK |
 | F4 Taif: dT~a - dT~b | +0.051 | `dT_pooled of arm_a and arm_b (T1v3_heldout / T21v3_<c> / T21v3_pers_<c>)` | difference of the two arms' pooled clipped-mean offsets, K | OK |
 
-### tab:sota
-
-| Item | Printed | Source: file [row filter] column | How it is computed | Check |
-|---|---|---|---|---|
-| This work: TUNED Riyadh | 12.5 | `T1v3_heldout [riyadh, TUNED, inforce] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
-| This work: MPC-24 h Riyadh | 18.3 | `T21v3_riyadh [24 h, perfect] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
-| This work: bracket low (CLV raw) | 18.0 | `T17v3_riyadh clv_s_raw` | clairvoyant schedule vs unshifted THERM | OK |
-| This work: bracket high (B*, printed as the end of 18.0--20.0) | 20.0 | `T17v3_riyadh bound_reported` | relaxed dual bound, V_N, rounded up | OK |
-
 ### tab:sensitivity
 
 | Item | Printed | Source: file [row filter] column | How it is computed | Check |
@@ -993,18 +984,348 @@ Values that are not a plain match (pending, not in a result file, cross-referenc
 | Riyadh cooling-season diurnal swing (K) *(stated in: Climate Profiles; Generalisability)* | 12.7 | `not in a v3 file: computed from the TMYx weather file in the case-study section (Section 6), not from a results file` | weather statistic | NOT IN A RESULT FILE |
 | Jeddah diurnal swing (K) *(stated in: Climate Profiles; Generalisability)* | 8.4 | `not in a v3 file: computed from the TMYx weather file in the case-study section (Section 6), not from a results file` | weather statistic | NOT IN A RESULT FILE |
 
+### tab:derived
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| TUNED s, Riyadh, c_sw 0.025 | 3.8 | `T38_derived_rules [TUNED, pooled, riyadh, 0.025] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| guard s, Riyadh, c_sw 0.025 | 1.8 | `T38_derived_rules [guard, pooled, riyadh, 0.025] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 perfect s, Riyadh, c_sw 0.025 | 5.7 | `T21v3_csw0.025_riyadh [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 persistence s, Riyadh, c_sw 0.025 | 4.0 | `T21v3_pers_csw0.025_riyadh [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| B* (V_N), Riyadh, c_sw 0.025 | 6.3 | `T5v3_bound [riyadh, 0.025] bound_reported` | relaxed dual bound, V_N, rounded up | OK |
+| F1 HL, Riyadh, c_sw 0.025 | +3.9 | `T39_derived_stats [0.025, pooled, F1, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| F2 HL, Riyadh, c_sw 0.025 | +2.0 | `T39_derived_stats [0.025, pooled, F2, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| F3 HL, Riyadh, c_sw 0.025 | +0.1 | `T39_derived_stats [0.025, pooled, F3, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| F4 HL, Riyadh, c_sw 0.025 | -2.0 | `T39_derived_stats [0.025, pooled, F4, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| TUNED s, Jeddah, c_sw 0.025 | 4.3 | `T38_derived_rules [TUNED, pooled, jeddah, 0.025] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| guard s, Jeddah, c_sw 0.025 | 2.4 | `T38_derived_rules [guard, pooled, jeddah, 0.025] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 perfect s, Jeddah, c_sw 0.025 | 4.7 | `T21v3_csw0.025_jeddah [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 persistence s, Jeddah, c_sw 0.025 | 4.8 | `T21v3_pers_csw0.025_jeddah [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| B* (V_N), Jeddah, c_sw 0.025 | 6.3 | `T5v3_bound [jeddah, 0.025] bound_reported` | relaxed dual bound, V_N, rounded up | OK |
+| F1 HL, Jeddah, c_sw 0.025 | +4.3 | `T39_derived_stats [0.025, pooled, F1, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| F2 HL, Jeddah, c_sw 0.025 | +0.5 | `T39_derived_stats [0.025, pooled, F2, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| F3 HL, Jeddah, c_sw 0.025 | +0.6 | `T39_derived_stats [0.025, pooled, F3, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| F4 HL, Jeddah, c_sw 0.025 | -1.9 | `T39_derived_stats [0.025, pooled, F4, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| TUNED s, Taif, c_sw 0.025 | 3.9 | `T38_derived_rules [TUNED, pooled, taif, 0.025] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| guard s, Taif, c_sw 0.025 | 3.5 | `T38_derived_rules [guard, pooled, taif, 0.025] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 perfect s, Taif, c_sw 0.025 | 5.4 | `T21v3_csw0.025_taif [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 persistence s, Taif, c_sw 0.025 | 3.4 | `T21v3_pers_csw0.025_taif [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| B* (V_N), Taif, c_sw 0.025 | 6.9 | `T5v3_bound [taif, 0.025] bound_reported` | relaxed dual bound, V_N, rounded up | OK |
+| F1 HL, Taif, c_sw 0.025 | +3.8 | `T39_derived_stats [0.025, pooled, F1, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+| F2 HL, Taif, c_sw 0.025 | +1.4 | `T39_derived_stats [0.025, pooled, F2, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+| F3 HL, Taif, c_sw 0.025 | -0.6 | `T39_derived_stats [0.025, pooled, F3, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+| F4 HL, Taif, c_sw 0.025 | 0.0 | `T39_derived_stats [0.025, pooled, F4, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+| TUNED s, Riyadh, c_sw 0.114 | 11.0 | `T38_derived_rules [TUNED, pooled, riyadh, 0.114] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| guard s, Riyadh, c_sw 0.114 | 5.0 | `T38_derived_rules [guard, pooled, riyadh, 0.114] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 perfect s, Riyadh, c_sw 0.114 | 16.1 | `T21v3_csw0.114_riyadh [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 persistence s, Riyadh, c_sw 0.114 | 11.1 | `T21v3_pers_csw0.114_riyadh [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| B* (V_N), Riyadh, c_sw 0.114 | 17.5 | `T5v3_bound [riyadh, 0.114] bound_reported` | relaxed dual bound, V_N, rounded up | OK |
+| F1 HL, Riyadh, c_sw 0.114 | +11.1 | `T39_derived_stats [0.114, pooled, F1, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| F2 HL, Riyadh, c_sw 0.114 | +5.4 | `T39_derived_stats [0.114, pooled, F2, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| F3 HL, Riyadh, c_sw 0.114 | -0.1 | `T39_derived_stats [0.114, pooled, F3, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| F4 HL, Riyadh, c_sw 0.114 | -5.8 | `T39_derived_stats [0.114, pooled, F4, riyadh] hl` | Hodges-Lehmann estimate (points) | OK |
+| TUNED s, Jeddah, c_sw 0.114 | 12.0 | `T38_derived_rules [TUNED, pooled, jeddah, 0.114] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| guard s, Jeddah, c_sw 0.114 | 6.7 | `T38_derived_rules [guard, pooled, jeddah, 0.114] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 perfect s, Jeddah, c_sw 0.114 | 13.7 | `T21v3_csw0.114_jeddah [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 persistence s, Jeddah, c_sw 0.114 | 12.8 | `T21v3_pers_csw0.114_jeddah [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| B* (V_N), Jeddah, c_sw 0.114 | 17.5 | `T5v3_bound [jeddah, 0.114] bound_reported` | relaxed dual bound, V_N, rounded up | OK |
+| F1 HL, Jeddah, c_sw 0.114 | +12.0 | `T39_derived_stats [0.114, pooled, F1, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| F2 HL, Jeddah, c_sw 0.114 | +1.7 | `T39_derived_stats [0.114, pooled, F2, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| F3 HL, Jeddah, c_sw 0.114 | +0.8 | `T39_derived_stats [0.114, pooled, F3, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| F4 HL, Jeddah, c_sw 0.114 | -5.3 | `T39_derived_stats [0.114, pooled, F4, jeddah] hl` | Hodges-Lehmann estimate (points) | OK |
+| TUNED s, Taif, c_sw 0.114 | 10.9 | `T38_derived_rules [TUNED, pooled, taif, 0.114] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| guard s, Taif, c_sw 0.114 | 9.7 | `T38_derived_rules [guard, pooled, taif, 0.114] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 perfect s, Taif, c_sw 0.114 | 14.9 | `T21v3_csw0.114_taif [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 persistence s, Taif, c_sw 0.114 | 9.5 | `T21v3_pers_csw0.114_taif [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| B* (V_N), Taif, c_sw 0.114 | 18.5 | `T5v3_bound [taif, 0.114] bound_reported` | relaxed dual bound, V_N, rounded up | OK |
+| F1 HL, Taif, c_sw 0.114 | +10.4 | `T39_derived_stats [0.114, pooled, F1, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+| F2 HL, Taif, c_sw 0.114 | +4.0 | `T39_derived_stats [0.114, pooled, F2, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+| F3 HL, Taif, c_sw 0.114 | -1.7 | `T39_derived_stats [0.114, pooled, F3, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+| F4 HL, Taif, c_sw 0.114 | 0.0 | `T39_derived_stats [0.114, pooled, F4, taif] hl` | Hodges-Lehmann estimate (points) | OK |
+
+### S9 tab:s-derived
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| pooled 0.025 F1 Riyadh: hl | +3.9 | `T39_derived_stats [0.025, pooled, F1, riyadh] hl` | points, signed | OK |
+| pooled 0.025 F1 Riyadh: hl_lo | +3.5 | `T39_derived_stats [0.025, pooled, F1, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.025 F1 Riyadh: hl_hi | +4.2 | `T39_derived_stats [0.025, pooled, F1, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.025 F1 Riyadh: d_pooled | +3.8 | `T39_derived_stats [0.025, pooled, F1, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.025 F1 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F1, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F1 Jeddah: hl | +4.3 | `T39_derived_stats [0.025, pooled, F1, jeddah] hl` | points, signed | OK |
+| pooled 0.025 F1 Jeddah: hl_lo | +3.8 | `T39_derived_stats [0.025, pooled, F1, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.025 F1 Jeddah: hl_hi | +4.8 | `T39_derived_stats [0.025, pooled, F1, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.025 F1 Jeddah: d_pooled | +4.3 | `T39_derived_stats [0.025, pooled, F1, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.025 F1 Jeddah: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F1, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F1 Taif: hl | +3.8 | `T39_derived_stats [0.025, pooled, F1, taif] hl` | points, signed | OK |
+| pooled 0.025 F1 Taif: hl_lo | +3.4 | `T39_derived_stats [0.025, pooled, F1, taif] hl_lo` | points, signed | OK |
+| pooled 0.025 F1 Taif: hl_hi | +4.6 | `T39_derived_stats [0.025, pooled, F1, taif] hl_hi` | points, signed | OK |
+| pooled 0.025 F1 Taif: d_pooled | +3.9 | `T39_derived_stats [0.025, pooled, F1, taif] d_pooled` | points, signed | OK |
+| pooled 0.025 F1 Taif: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F1, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F2 Riyadh: hl | +2.0 | `T39_derived_stats [0.025, pooled, F2, riyadh] hl` | points, signed | OK |
+| pooled 0.025 F2 Riyadh: hl_lo | +1.1 | `T39_derived_stats [0.025, pooled, F2, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.025 F2 Riyadh: hl_hi | +2.5 | `T39_derived_stats [0.025, pooled, F2, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.025 F2 Riyadh: d_pooled | +1.9 | `T39_derived_stats [0.025, pooled, F2, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.025 F2 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F2, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F2 Jeddah: hl | +0.5 | `T39_derived_stats [0.025, pooled, F2, jeddah] hl` | points, signed | OK |
+| pooled 0.025 F2 Jeddah: hl_lo | +0.1 | `T39_derived_stats [0.025, pooled, F2, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.025 F2 Jeddah: hl_hi | +0.7 | `T39_derived_stats [0.025, pooled, F2, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.025 F2 Jeddah: d_pooled | +0.4 | `T39_derived_stats [0.025, pooled, F2, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.025 F2 Jeddah: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F2, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F2 Taif: hl | +1.4 | `T39_derived_stats [0.025, pooled, F2, taif] hl` | points, signed | OK |
+| pooled 0.025 F2 Taif: hl_lo | +0.6 | `T39_derived_stats [0.025, pooled, F2, taif] hl_lo` | points, signed | OK |
+| pooled 0.025 F2 Taif: hl_hi | +2.5 | `T39_derived_stats [0.025, pooled, F2, taif] hl_hi` | points, signed | OK |
+| pooled 0.025 F2 Taif: d_pooled | +1.4 | `T39_derived_stats [0.025, pooled, F2, taif] d_pooled` | points, signed | OK |
+| pooled 0.025 F2 Taif: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F2, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F3 Riyadh: hl | +0.1 | `T39_derived_stats [0.025, pooled, F3, riyadh] hl` | points, signed | OK |
+| pooled 0.025 F3 Riyadh: hl_lo | -0.8 | `T39_derived_stats [0.025, pooled, F3, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.025 F3 Riyadh: hl_hi | +1.0 | `T39_derived_stats [0.025, pooled, F3, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.025 F3 Riyadh: d_pooled | +0.2 | `T39_derived_stats [0.025, pooled, F3, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.025 F3 Riyadh: p_adj | 0.938 | `T39_derived_stats [0.025, pooled, F3, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F3 Jeddah: hl | +0.6 | `T39_derived_stats [0.025, pooled, F3, jeddah] hl` | points, signed | OK |
+| pooled 0.025 F3 Jeddah: hl_lo | 0.0 | `T39_derived_stats [0.025, pooled, F3, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.025 F3 Jeddah: hl_hi | +1.1 | `T39_derived_stats [0.025, pooled, F3, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.025 F3 Jeddah: d_pooled | +0.5 | `T39_derived_stats [0.025, pooled, F3, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.025 F3 Jeddah: p_adj | 0.234 | `T39_derived_stats [0.025, pooled, F3, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F3 Taif: hl | -0.6 | `T39_derived_stats [0.025, pooled, F3, taif] hl` | points, signed | OK |
+| pooled 0.025 F3 Taif: hl_lo | -1.9 | `T39_derived_stats [0.025, pooled, F3, taif] hl_lo` | points, signed | OK |
+| pooled 0.025 F3 Taif: hl_hi | +0.4 | `T39_derived_stats [0.025, pooled, F3, taif] hl_hi` | points, signed | OK |
+| pooled 0.025 F3 Taif: d_pooled | -0.5 | `T39_derived_stats [0.025, pooled, F3, taif] d_pooled` | points, signed | OK |
+| pooled 0.025 F3 Taif: p_adj | 0.234 | `T39_derived_stats [0.025, pooled, F3, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F4 Riyadh: hl | -2.0 | `T39_derived_stats [0.025, pooled, F4, riyadh] hl` | points, signed | OK |
+| pooled 0.025 F4 Riyadh: hl_lo | -2.4 | `T39_derived_stats [0.025, pooled, F4, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.025 F4 Riyadh: hl_hi | -1.7 | `T39_derived_stats [0.025, pooled, F4, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.025 F4 Riyadh: d_pooled | -2.1 | `T39_derived_stats [0.025, pooled, F4, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.025 F4 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F4, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F4 Jeddah: hl | -1.9 | `T39_derived_stats [0.025, pooled, F4, jeddah] hl` | points, signed | OK |
+| pooled 0.025 F4 Jeddah: hl_lo | -2.1 | `T39_derived_stats [0.025, pooled, F4, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.025 F4 Jeddah: hl_hi | -1.6 | `T39_derived_stats [0.025, pooled, F4, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.025 F4 Jeddah: d_pooled | -1.9 | `T39_derived_stats [0.025, pooled, F4, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.025 F4 Jeddah: p_adj | 0.047 | `T39_derived_stats [0.025, pooled, F4, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.025 F4 Taif: hl | 0.0 | `T39_derived_stats [0.025, pooled, F4, taif] hl` | points, signed | OK |
+| pooled 0.025 F4 Taif: hl_lo | -1.0 | `T39_derived_stats [0.025, pooled, F4, taif] hl_lo` | points, signed | OK |
+| pooled 0.025 F4 Taif: hl_hi | 0.0 | `T39_derived_stats [0.025, pooled, F4, taif] hl_hi` | points, signed | OK |
+| pooled 0.025 F4 Taif: d_pooled | -0.5 | `T39_derived_stats [0.025, pooled, F4, taif] d_pooled` | points, signed | OK |
+| pooled 0.025 F4 Taif: p_adj | 1.000 | `T39_derived_stats [0.025, pooled, F4, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F1 Riyadh: hl | +11.1 | `T39_derived_stats [0.114, pooled, F1, riyadh] hl` | points, signed | OK |
+| pooled 0.114 F1 Riyadh: hl_lo | +10.0 | `T39_derived_stats [0.114, pooled, F1, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.114 F1 Riyadh: hl_hi | +12.1 | `T39_derived_stats [0.114, pooled, F1, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.114 F1 Riyadh: d_pooled | +11.0 | `T39_derived_stats [0.114, pooled, F1, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.114 F1 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.114, pooled, F1, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F1 Jeddah: hl | +12.0 | `T39_derived_stats [0.114, pooled, F1, jeddah] hl` | points, signed | OK |
+| pooled 0.114 F1 Jeddah: hl_lo | +10.8 | `T39_derived_stats [0.114, pooled, F1, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.114 F1 Jeddah: hl_hi | +13.4 | `T39_derived_stats [0.114, pooled, F1, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.114 F1 Jeddah: d_pooled | +12.0 | `T39_derived_stats [0.114, pooled, F1, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.114 F1 Jeddah: p_adj | 0.047 | `T39_derived_stats [0.114, pooled, F1, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F1 Taif: hl | +10.4 | `T39_derived_stats [0.114, pooled, F1, taif] hl` | points, signed | OK |
+| pooled 0.114 F1 Taif: hl_lo | +9.4 | `T39_derived_stats [0.114, pooled, F1, taif] hl_lo` | points, signed | OK |
+| pooled 0.114 F1 Taif: hl_hi | +12.7 | `T39_derived_stats [0.114, pooled, F1, taif] hl_hi` | points, signed | OK |
+| pooled 0.114 F1 Taif: d_pooled | +10.9 | `T39_derived_stats [0.114, pooled, F1, taif] d_pooled` | points, signed | OK |
+| pooled 0.114 F1 Taif: p_adj | 0.047 | `T39_derived_stats [0.114, pooled, F1, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F2 Riyadh: hl | +5.4 | `T39_derived_stats [0.114, pooled, F2, riyadh] hl` | points, signed | OK |
+| pooled 0.114 F2 Riyadh: hl_lo | +3.3 | `T39_derived_stats [0.114, pooled, F2, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.114 F2 Riyadh: hl_hi | +6.8 | `T39_derived_stats [0.114, pooled, F2, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.114 F2 Riyadh: d_pooled | +5.1 | `T39_derived_stats [0.114, pooled, F2, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.114 F2 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.114, pooled, F2, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F2 Jeddah: hl | +1.7 | `T39_derived_stats [0.114, pooled, F2, jeddah] hl` | points, signed | OK |
+| pooled 0.114 F2 Jeddah: hl_lo | -0.1 | `T39_derived_stats [0.114, pooled, F2, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.114 F2 Jeddah: hl_hi | +3.5 | `T39_derived_stats [0.114, pooled, F2, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.114 F2 Jeddah: d_pooled | +1.8 | `T39_derived_stats [0.114, pooled, F2, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.114 F2 Jeddah: p_adj | 0.078 | `T39_derived_stats [0.114, pooled, F2, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F2 Taif: hl | +4.0 | `T39_derived_stats [0.114, pooled, F2, taif] hl` | points, signed | OK |
+| pooled 0.114 F2 Taif: hl_lo | +1.8 | `T39_derived_stats [0.114, pooled, F2, taif] hl_lo` | points, signed | OK |
+| pooled 0.114 F2 Taif: hl_hi | +7.0 | `T39_derived_stats [0.114, pooled, F2, taif] hl_hi` | points, signed | OK |
+| pooled 0.114 F2 Taif: d_pooled | +4.0 | `T39_derived_stats [0.114, pooled, F2, taif] d_pooled` | points, signed | OK |
+| pooled 0.114 F2 Taif: p_adj | 0.047 | `T39_derived_stats [0.114, pooled, F2, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F3 Riyadh: hl | -0.1 | `T39_derived_stats [0.114, pooled, F3, riyadh] hl` | points, signed | OK |
+| pooled 0.114 F3 Riyadh: hl_lo | -2.6 | `T39_derived_stats [0.114, pooled, F3, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.114 F3 Riyadh: hl_hi | +2.4 | `T39_derived_stats [0.114, pooled, F3, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.114 F3 Riyadh: d_pooled | +0.2 | `T39_derived_stats [0.114, pooled, F3, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.114 F3 Riyadh: p_adj | 0.812 | `T39_derived_stats [0.114, pooled, F3, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F3 Jeddah: hl | +0.8 | `T39_derived_stats [0.114, pooled, F3, jeddah] hl` | points, signed | OK |
+| pooled 0.114 F3 Jeddah: hl_lo | -0.4 | `T39_derived_stats [0.114, pooled, F3, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.114 F3 Jeddah: hl_hi | +1.9 | `T39_derived_stats [0.114, pooled, F3, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.114 F3 Jeddah: d_pooled | +0.9 | `T39_derived_stats [0.114, pooled, F3, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.114 F3 Jeddah: p_adj | 0.438 | `T39_derived_stats [0.114, pooled, F3, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F3 Taif: hl | -1.7 | `T39_derived_stats [0.114, pooled, F3, taif] hl` | points, signed | OK |
+| pooled 0.114 F3 Taif: hl_lo | -5.1 | `T39_derived_stats [0.114, pooled, F3, taif] hl_lo` | points, signed | OK |
+| pooled 0.114 F3 Taif: hl_hi | +1.1 | `T39_derived_stats [0.114, pooled, F3, taif] hl_hi` | points, signed | OK |
+| pooled 0.114 F3 Taif: d_pooled | -1.4 | `T39_derived_stats [0.114, pooled, F3, taif] d_pooled` | points, signed | OK |
+| pooled 0.114 F3 Taif: p_adj | 0.328 | `T39_derived_stats [0.114, pooled, F3, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F4 Riyadh: hl | -5.8 | `T39_derived_stats [0.114, pooled, F4, riyadh] hl` | points, signed | OK |
+| pooled 0.114 F4 Riyadh: hl_lo | -6.8 | `T39_derived_stats [0.114, pooled, F4, riyadh] hl_lo` | points, signed | OK |
+| pooled 0.114 F4 Riyadh: hl_hi | -4.9 | `T39_derived_stats [0.114, pooled, F4, riyadh] hl_hi` | points, signed | OK |
+| pooled 0.114 F4 Riyadh: d_pooled | -5.9 | `T39_derived_stats [0.114, pooled, F4, riyadh] d_pooled` | points, signed | OK |
+| pooled 0.114 F4 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.114, pooled, F4, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F4 Jeddah: hl | -5.3 | `T39_derived_stats [0.114, pooled, F4, jeddah] hl` | points, signed | OK |
+| pooled 0.114 F4 Jeddah: hl_lo | -5.9 | `T39_derived_stats [0.114, pooled, F4, jeddah] hl_lo` | points, signed | OK |
+| pooled 0.114 F4 Jeddah: hl_hi | -4.6 | `T39_derived_stats [0.114, pooled, F4, jeddah] hl_hi` | points, signed | OK |
+| pooled 0.114 F4 Jeddah: d_pooled | -5.3 | `T39_derived_stats [0.114, pooled, F4, jeddah] d_pooled` | points, signed | OK |
+| pooled 0.114 F4 Jeddah: p_adj | 0.047 | `T39_derived_stats [0.114, pooled, F4, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| pooled 0.114 F4 Taif: hl | 0.0 | `T39_derived_stats [0.114, pooled, F4, taif] hl` | points, signed | OK |
+| pooled 0.114 F4 Taif: hl_lo | -2.6 | `T39_derived_stats [0.114, pooled, F4, taif] hl_lo` | points, signed | OK |
+| pooled 0.114 F4 Taif: hl_hi | +0.1 | `T39_derived_stats [0.114, pooled, F4, taif] hl_hi` | points, signed | OK |
+| pooled 0.114 F4 Taif: d_pooled | -1.2 | `T39_derived_stats [0.114, pooled, F4, taif] d_pooled` | points, signed | OK |
+| pooled 0.114 F4 Taif: p_adj | 0.938 | `T39_derived_stats [0.114, pooled, F4, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.025 F2 Riyadh: hl | +2.0 | `T39_derived_stats [0.025, per_window, F2, riyadh] hl` | points, signed | OK |
+| per_window 0.025 F2 Riyadh: hl_lo | +1.4 | `T39_derived_stats [0.025, per_window, F2, riyadh] hl_lo` | points, signed | OK |
+| per_window 0.025 F2 Riyadh: hl_hi | +2.5 | `T39_derived_stats [0.025, per_window, F2, riyadh] hl_hi` | points, signed | OK |
+| per_window 0.025 F2 Riyadh: d_pooled | +2.0 | `T39_derived_stats [0.025, per_window, F2, riyadh] d_pooled` | points, signed | OK |
+| per_window 0.025 F2 Riyadh: p_adj | 0.031 | `T39_derived_stats [0.025, per_window, F2, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.025 F2 Jeddah: hl | +1.9 | `T39_derived_stats [0.025, per_window, F2, jeddah] hl` | points, signed | OK |
+| per_window 0.025 F2 Jeddah: hl_lo | +1.5 | `T39_derived_stats [0.025, per_window, F2, jeddah] hl_lo` | points, signed | OK |
+| per_window 0.025 F2 Jeddah: hl_hi | +2.2 | `T39_derived_stats [0.025, per_window, F2, jeddah] hl_hi` | points, signed | OK |
+| per_window 0.025 F2 Jeddah: d_pooled | +1.8 | `T39_derived_stats [0.025, per_window, F2, jeddah] d_pooled` | points, signed | OK |
+| per_window 0.025 F2 Jeddah: p_adj | 0.031 | `T39_derived_stats [0.025, per_window, F2, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.025 F2 Taif: not admitted | no admissible | `T39_derived_stats [0.025, per_window, F2, taif] admitted` | no admissible MPC fit under the criterion (mpc_lambda writes no file) | OK |
+| per_window 0.025 F3 Riyadh: hl | -1.4 | `T39_derived_stats [0.025, per_window, F3, riyadh] hl` | points, signed | OK |
+| per_window 0.025 F3 Riyadh: hl_lo | -1.9 | `T39_derived_stats [0.025, per_window, F3, riyadh] hl_lo` | points, signed | OK |
+| per_window 0.025 F3 Riyadh: hl_hi | -0.7 | `T39_derived_stats [0.025, per_window, F3, riyadh] hl_hi` | points, signed | OK |
+| per_window 0.025 F3 Riyadh: d_pooled | -1.4 | `T39_derived_stats [0.025, per_window, F3, riyadh] d_pooled` | points, signed | OK |
+| per_window 0.025 F3 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.025, per_window, F3, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.025 F3 Jeddah: hl | +1.0 | `T39_derived_stats [0.025, per_window, F3, jeddah] hl` | points, signed | OK |
+| per_window 0.025 F3 Jeddah: hl_lo | 0.0 | `T39_derived_stats [0.025, per_window, F3, jeddah] hl_lo` | points, signed | OK |
+| per_window 0.025 F3 Jeddah: hl_hi | +1.8 | `T39_derived_stats [0.025, per_window, F3, jeddah] hl_hi` | points, signed | OK |
+| per_window 0.025 F3 Jeddah: d_pooled | +0.9 | `T39_derived_stats [0.025, per_window, F3, jeddah] d_pooled` | points, signed | OK |
+| per_window 0.025 F3 Jeddah: p_adj | 0.078 | `T39_derived_stats [0.025, per_window, F3, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.025 F3 Taif: hl | -1.0 | `T39_derived_stats [0.025, per_window, F3, taif] hl` | points, signed | OK |
+| per_window 0.025 F3 Taif: hl_lo | -4.3 | `T39_derived_stats [0.025, per_window, F3, taif] hl_lo` | points, signed | OK |
+| per_window 0.025 F3 Taif: hl_hi | -0.4 | `T39_derived_stats [0.025, per_window, F3, taif] hl_hi` | points, signed | OK |
+| per_window 0.025 F3 Taif: d_pooled | -1.6 | `T39_derived_stats [0.025, per_window, F3, taif] d_pooled` | points, signed | OK |
+| per_window 0.025 F3 Taif: p_adj | 0.062 | `T39_derived_stats [0.025, per_window, F3, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.114 F2 Riyadh: hl | +5.2 | `T39_derived_stats [0.114, per_window, F2, riyadh] hl` | points, signed | OK |
+| per_window 0.114 F2 Riyadh: hl_lo | +2.0 | `T39_derived_stats [0.114, per_window, F2, riyadh] hl_lo` | points, signed | OK |
+| per_window 0.114 F2 Riyadh: hl_hi | +6.8 | `T39_derived_stats [0.114, per_window, F2, riyadh] hl_hi` | points, signed | OK |
+| per_window 0.114 F2 Riyadh: d_pooled | +5.2 | `T39_derived_stats [0.114, per_window, F2, riyadh] d_pooled` | points, signed | OK |
+| per_window 0.114 F2 Riyadh: p_adj | 0.031 | `T39_derived_stats [0.114, per_window, F2, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.114 F2 Jeddah: hl | +5.3 | `T39_derived_stats [0.114, per_window, F2, jeddah] hl` | points, signed | OK |
+| per_window 0.114 F2 Jeddah: hl_lo | +4.1 | `T39_derived_stats [0.114, per_window, F2, jeddah] hl_lo` | points, signed | OK |
+| per_window 0.114 F2 Jeddah: hl_hi | +6.0 | `T39_derived_stats [0.114, per_window, F2, jeddah] hl_hi` | points, signed | OK |
+| per_window 0.114 F2 Jeddah: d_pooled | +5.2 | `T39_derived_stats [0.114, per_window, F2, jeddah] d_pooled` | points, signed | OK |
+| per_window 0.114 F2 Jeddah: p_adj | 0.031 | `T39_derived_stats [0.114, per_window, F2, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.114 F2 Taif: not admitted | no admissible | `T39_derived_stats [0.114, per_window, F2, taif] admitted` | no admissible MPC fit under the criterion (mpc_lambda writes no file) | OK |
+| per_window 0.114 F3 Riyadh: hl | -4.4 | `T39_derived_stats [0.114, per_window, F3, riyadh] hl` | points, signed | OK |
+| per_window 0.114 F3 Riyadh: hl_lo | -6.3 | `T39_derived_stats [0.114, per_window, F3, riyadh] hl_lo` | points, signed | OK |
+| per_window 0.114 F3 Riyadh: hl_hi | -2.9 | `T39_derived_stats [0.114, per_window, F3, riyadh] hl_hi` | points, signed | OK |
+| per_window 0.114 F3 Riyadh: d_pooled | -4.6 | `T39_derived_stats [0.114, per_window, F3, riyadh] d_pooled` | points, signed | OK |
+| per_window 0.114 F3 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.114, per_window, F3, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.114 F3 Jeddah: hl | +2.1 | `T39_derived_stats [0.114, per_window, F3, jeddah] hl` | points, signed | OK |
+| per_window 0.114 F3 Jeddah: hl_lo | 0.0 | `T39_derived_stats [0.114, per_window, F3, jeddah] hl_lo` | points, signed | OK |
+| per_window 0.114 F3 Jeddah: hl_hi | +3.9 | `T39_derived_stats [0.114, per_window, F3, jeddah] hl_hi` | points, signed | OK |
+| per_window 0.114 F3 Jeddah: d_pooled | +2.1 | `T39_derived_stats [0.114, per_window, F3, jeddah] d_pooled` | points, signed | OK |
+| per_window 0.114 F3 Jeddah: p_adj | 0.078 | `T39_derived_stats [0.114, per_window, F3, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.114 F3 Taif: hl | -2.9 | `T39_derived_stats [0.114, per_window, F3, taif] hl` | points, signed | OK |
+| per_window 0.114 F3 Taif: hl_lo | -12.1 | `T39_derived_stats [0.114, per_window, F3, taif] hl_lo` | points, signed | OK |
+| per_window 0.114 F3 Taif: hl_hi | -1.1 | `T39_derived_stats [0.114, per_window, F3, taif] hl_hi` | points, signed | OK |
+| per_window 0.114 F3 Taif: d_pooled | -4.3 | `T39_derived_stats [0.114, per_window, F3, taif] d_pooled` | points, signed | OK |
+| per_window 0.114 F3 Taif: p_adj | 0.062 | `T39_derived_stats [0.114, per_window, F3, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.15 F2 Riyadh: hl | +8.9 | `T39_derived_stats [0.15, per_window, F2, riyadh] hl` | points, signed | OK |
+| per_window 0.15 F2 Riyadh: hl_lo | +6.7 | `T39_derived_stats [0.15, per_window, F2, riyadh] hl_lo` | points, signed | OK |
+| per_window 0.15 F2 Riyadh: hl_hi | +10.4 | `T39_derived_stats [0.15, per_window, F2, riyadh] hl_hi` | points, signed | OK |
+| per_window 0.15 F2 Riyadh: d_pooled | +8.5 | `T39_derived_stats [0.15, per_window, F2, riyadh] d_pooled` | points, signed | OK |
+| per_window 0.15 F2 Riyadh: p_adj | 0.031 | `T39_derived_stats [0.15, per_window, F2, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.15 F2 Jeddah: hl | +6.0 | `T39_derived_stats [0.15, per_window, F2, jeddah] hl` | points, signed | OK |
+| per_window 0.15 F2 Jeddah: hl_lo | +4.7 | `T39_derived_stats [0.15, per_window, F2, jeddah] hl_lo` | points, signed | OK |
+| per_window 0.15 F2 Jeddah: hl_hi | +6.9 | `T39_derived_stats [0.15, per_window, F2, jeddah] hl_hi` | points, signed | OK |
+| per_window 0.15 F2 Jeddah: d_pooled | +5.9 | `T39_derived_stats [0.15, per_window, F2, jeddah] d_pooled` | points, signed | OK |
+| per_window 0.15 F2 Jeddah: p_adj | 0.031 | `T39_derived_stats [0.15, per_window, F2, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.15 F2 Taif: not admitted | no admissible | `T39_derived_stats [0.15, per_window, F2, taif] admitted` | no admissible MPC fit under the criterion (mpc_lambda writes no file) | OK |
+| per_window 0.15 F3 Riyadh: hl | +2.5 | `T39_derived_stats [0.15, per_window, F3, riyadh] hl` | points, signed | OK |
+| per_window 0.15 F3 Riyadh: hl_lo | +1.2 | `T39_derived_stats [0.15, per_window, F3, riyadh] hl_lo` | points, signed | OK |
+| per_window 0.15 F3 Riyadh: hl_hi | +4.6 | `T39_derived_stats [0.15, per_window, F3, riyadh] hl_hi` | points, signed | OK |
+| per_window 0.15 F3 Riyadh: d_pooled | +3.0 | `T39_derived_stats [0.15, per_window, F3, riyadh] d_pooled` | points, signed | OK |
+| per_window 0.15 F3 Riyadh: p_adj | 0.047 | `T39_derived_stats [0.15, per_window, F3, riyadh] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.15 F3 Jeddah: hl | +2.4 | `T39_derived_stats [0.15, per_window, F3, jeddah] hl` | points, signed | OK |
+| per_window 0.15 F3 Jeddah: hl_lo | 0.0 | `T39_derived_stats [0.15, per_window, F3, jeddah] hl_lo` | points, signed | OK |
+| per_window 0.15 F3 Jeddah: hl_hi | +4.5 | `T39_derived_stats [0.15, per_window, F3, jeddah] hl_hi` | points, signed | OK |
+| per_window 0.15 F3 Jeddah: d_pooled | +2.4 | `T39_derived_stats [0.15, per_window, F3, jeddah] d_pooled` | points, signed | OK |
+| per_window 0.15 F3 Jeddah: p_adj | 0.078 | `T39_derived_stats [0.15, per_window, F3, jeddah] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+| per_window 0.15 F3 Taif: hl | -3.2 | `T39_derived_stats [0.15, per_window, F3, taif] hl` | points, signed | OK |
+| per_window 0.15 F3 Taif: hl_lo | -13.8 | `T39_derived_stats [0.15, per_window, F3, taif] hl_lo` | points, signed | OK |
+| per_window 0.15 F3 Taif: hl_hi | -1.2 | `T39_derived_stats [0.15, per_window, F3, taif] hl_hi` | points, signed | OK |
+| per_window 0.15 F3 Taif: d_pooled | -4.9 | `T39_derived_stats [0.15, per_window, F3, taif] d_pooled` | points, signed | OK |
+| per_window 0.15 F3 Taif: p_adj | 0.062 | `T39_derived_stats [0.15, per_window, F3, taif] p_adj` | Holm-adjusted exact Wilcoxon p | OK |
+
+### S2 tab:s-protocol
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| MPC-24 perfect, per-window criterion, 0.15 SAR (Riyadh, Jeddah) | 18.3 -- 18.1 | `T21v3_pwadm_<c> [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| MPC-24 persistence, per-window criterion, 0.15 SAR | 12.7 -- 14.6 -- -1.0 | `T21v3_pers_pwadm_<c> [24 h] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| F2 pooled difference under the per-window criterion, 0.15 SAR | +8.5 -- +5.9 | `T39_derived_stats [0.15, per_window, F2] d_pooled` | pooled difference, points | OK |
+
+### main §8.1 derived
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| derived: TUNED at 0.025 (Riyadh, Jeddah, Taif) *(stated in: Headline Results at the Supported Charge)* | 3.8 -- 4.3 -- 3.9 | `T38_derived_rules [TUNED, pooled, 0.025] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| derived: TUNED at 0.114 (Riyadh, Jeddah, Taif) *(stated in: Headline Results at the Supported Charge)* | 11.0 -- 12.0 -- 10.9 | `T38_derived_rules [TUNED, pooled, 0.114] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| derived: TUNED on-commands avoided, same at every charge *(stated in: Headline Results at the Supported Charge)* | 22.8 -- 24.2 -- 21.7 | `T38_derived_rules [TUNED, pooled, 0.025 and 0.114] start_sav_eq` | share of on-commands avoided (%) | OK |
+| derived: guard short of TUNED at 0.114, pooled (Riyadh, Jeddah) *(stated in: Headline Results at the Supported Charge)* | 5.9 -- 5.3 | `T39_derived_stats [0.114, pooled, F4] d_pooled` | minus the pooled difference | OK |
+| derived: MPC-24 perfect at 0.025 *(stated in: Headline Results at the Supported Charge)* | 5.7 -- 4.7 -- 5.4 | `T21v3_csw0.025_<c> s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| derived: MPC-24 perfect at 0.114 *(stated in: Headline Results at the Supported Charge)* | 16.1 -- 13.7 -- 14.9 | `T21v3_csw0.114_<c> s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| derived: F2 HL at 0.114 (Riyadh, Taif, Jeddah) *(stated in: Headline Results at the Supported Charge)* | +5.4 -- +4.0 -- +1.7 | `T39_derived_stats [0.114, pooled, F2] hl` | Hodges-Lehmann estimate | OK |
+| derived: Jeddah MPC lam/lam* at 0.025 and 0.114 *(stated in: Headline Results at the Supported Charge)* | 2.6 -- 2.3 | `T21v3_csw<x>_jeddah lam_over_lam_star` | fitted multiplier ratio | OK |
+| derived: Jeddah MPC cooler than THERM (K) *(stated in: Headline Results at the Supported Charge)* | 0.08 -- 0.10 | `T21v3_csw<x>_jeddah dT_pooled` | minus the pooled clipped-mean offset | OK |
+| derived: Jeddah MPC on-commands avoided (27--28) against 32 at 0.15 *(stated in: Headline Results at the Supported Charge)* | 27 -- 28 -- 32 | `T21v3_csw<x>_jeddah / T21v3_jeddah start_sav_eq` | share of on-commands avoided (%) | OK |
+| derived: Jeddah per-window MPC warmer than THERM (K) and its F2 HL *(stated in: Headline Results at the Supported Charge)* | 0.015 -- +5.3 | `T21v3_csw0.114_pwadm_jeddah dT_pooled; T39 [0.114, per_window, F2, jeddah] hl` | offset; HL | OK |
+| derived: F2 pooled margins at 0.025 (0.4--1.9) *(stated in: Headline Results at the Supported Charge)* | 0.4 -- 1.9 | `T39_derived_stats [0.025, pooled, F2] d_pooled` | min..max over cities | OK |
+| derived: F3 HL range at both charges (-1.7..+0.8) *(stated in: Headline Results at the Supported Charge)* | -1.7 -- +0.8 | `T39_derived_stats [0.025 and 0.114, pooled, F3] hl` | min..max over cities and charges | OK |
+| derived: B* range at 0.025 and 0.114 *(stated in: Headline Results at the Supported Charge)* | 6.3 -- 6.9 -- 17.5 -- 18.5 | `T5v3_bound bound_reported` | min..max over cities at each charge | OK |
+| derived: share of B* at 0.114, TUNED 59--68, MPC 78--92 *(stated in: Headline Results at the Supported Charge)* | 59 -- 68 -- 78 -- 92 | `T38_derived_rules / T21v3_csw0.114 / T5v3_bound` | s / B* x 100, min..max over cities | OK |
+
+### main §10.4 per-window admission
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| per-window: MPC-24 perfect at 0.025 and 0.114 (Riyadh, Jeddah) *(stated in: Limitations)* | 5.0 -- 5.7 -- 13.7 -- 15.9 | `T21v3_csw<x>_pwadm_<c> s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| per-window: TUNED at 0.025 and 0.114 (Riyadh, Jeddah) *(stated in: Limitations)* | 3.0 -- 3.8 -- 8.5 -- 10.8 | `T38_derived_rules [TUNED, per_window] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| per-window: F2 pooled margins at 0.025 (2.0, 1.8) and 0.114 (5.2) *(stated in: Limitations)* | 2.0 -- 1.8 -- 5.2 | `T39_derived_stats [per_window, F2] d_pooled` | pooled difference | OK |
+| per-window: F2 pooled margins at 0.15 (8.5, 5.9) against pooled criterion (5.7, 4.4) *(stated in: Limitations)* | 8.5 -- 5.9 -- 5.7 -- 4.4 | `T39_derived_stats [0.15, per_window / pooled, F2] d_pooled` | pooled difference | OK |
+| per-window: MPC offsets from THERM (-0.05..+0.01 K) *(stated in: Limitations)* | -0.05 -- +0.01 | `T21v3*_pwadm_<c> dT_pooled (perfect)` | min..max over cities and charges | OK |
+| per-window: persistence pooled margin +3.0 (Riyadh 0.15) and lowest -4.9 *(stated in: Limitations)* | +3.0 -- -4.9 | `T39_derived_stats [per_window, F3] d_pooled` | pooled difference | OK |
+
 ### abstract + conclusions
 
 | Item | Printed | Source: file [row filter] column | How it is computed | Check |
 |---|---|---|---|---|
-| abstract: best attainable saving about 17--21 % (min CLV raw .. max B*) *(stated in: Abstract)* | 17 -- 21 | `T17v3_<c> clv_s_raw, bound_reported` | min over cities of the clairvoyant saving and max of B*, rounded to integers | OK |
+| abstract: TUNED at the derived charges *(stated in: Abstract)* | 3.8 -- 4.3 -- 10.9 -- 12.0 | `T38_derived_rules [TUNED, pooled] s_pooled_eq` | min..max over cities at each charge | OK |
+| abstract: MPC adds 5.4 and 4.0 at 0.114; per-window Jeddah 5.3 *(stated in: Abstract)* | 5.4 -- 4.0 -- 5.3 | `T39_derived_stats hl` | Hodges-Lehmann estimates | OK |
+| abstract: bound over the supported charges *(stated in: Abstract)* | 6.3 -- 6.9 -- 17.5 -- 18.5 | `T5v3_bound bound_reported` | min..max over cities at each charge | OK |
+| conclusions: MPC-24 perfect avoids 27--34 % of on-commands at the derived charges *(stated in: Conclusions)* | 27 -- 34 | `T21v3_csw<x>_<c> start_sav_eq` | min..max over cities and charges | OK |
+| conclusions: per-window margin at 0.114 (Riyadh 5.2, Jeddah 5.3) *(stated in: Conclusions)* | 5.2 -- 5.3 | `T39_derived_stats [0.114, per_window, F2] hl` | Hodges-Lehmann estimate | OK |
+| conclusions: guard cost at 0.114 (5.9, 5.3) *(stated in: Conclusions)* | 5.9 -- 5.3 | `T39_derived_stats [0.114, pooled, F4] d_pooled` | minus the pooled difference | OK |
+
+### main §10.3 what governs
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| controller class at 0.114 (11; guard 5.0, TUNED 11.0, MPC 16.1) and at 0.025 (4) *(stated in: What Governs the Saving)* | 11 -- 5.0 -- 11.0 -- 16.1 -- 4 | `T38_derived_rules / T21v3_csw<x>_riyadh s_pooled_eq` | Riyadh; MPC minus guard, unrounded | OK |
+
+### tab:sota
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| This work: TUNED Riyadh 3.8--11.0 | 3.8 -- 11.0 | `T38_derived_rules [TUNED, pooled, riyadh] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| This work: MPC-24 h Riyadh 5.7--16.1 | 5.7 -- 16.1 | `T21v3_csw<x>_riyadh s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| This work: bound Riyadh 6.3--17.5 | 6.3 -- 17.5 | `T5v3_bound [riyadh] bound_reported` | relaxed dual bound, V_N, rounded up | OK |
+
+### main §9.1 comparison text
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| sota text: at 0.15 TUNED, MPC-24 and the bracket (12.5, 18.3, 18.0--20.0) *(stated in: State-of-the-Art Comparison)* | 12.5 -- 18.3 -- 18.0 -- 20.0 | `T1v3_heldout / T21v3_riyadh / T17v3_riyadh` | values at the 0.15 SAR sensitivity case | OK |
+
+### abstract + conclusions
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
 | fitted deadband R1 - R2 (min..max over cities) *(stated in: Conclusions)* | 1.32 -- 1.36 | `T1v3_heldout [TUNED, inforce] params.on - params.off` | TUNED switch points R1 - R2 (degC) | OK |
 | on-commands avoided by TUNED (22--24) *(stated in: Abstract; Conclusions)* | 22 -- 24 | `T1v3_heldout [TUNED, inforce] start_sav_eq` | min..max over cities (21.7 rounds to 22) | OK |
 | TUNED electricity within +/-0.5 % (max |energy_sav_eq|) *(stated in: Conclusions)* | 0.5 | `T1v3_heldout [TUNED, inforce] energy_sav_eq` | max over cities of |energy saving| | OK |
 | TUNED SAR/season at 0.025--0.114 (2--19) *(stated in: Conclusions)* | 2 -- 19 | `T1v3_perwindow [TUNED, inforce] fs/E` | tab:layers formula, min over cities at 0.025, max at 0.114 | OK |
 | TUNED cost saving 12.4--13.6 *(stated in: Abstract)* | 12.4 -- 13.6 | `T1v3_heldout [TUNED, inforce] s_pooled_eq` | min..max over cities | OK |
 | TUNED against a 1.25 C comparator (Riyadh) *(stated in: Conclusions)* | 5.7 | `T7v3_deadband [riyadh, 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
-| MPC-24 perfect avoids 30--33 % of on-commands *(stated in: Conclusions)* | 30 -- 33 | `T21v3_<c> [24 h, perfect] start_sav_eq` | min..max over cities | OK |
 | TUNED at half / twice capacity (Riyadh) *(stated in: Where the MPC Margin Comes From)* | -2.8 -- 15.8 | `T1v3_heldout_cth2400 / _cth9600 [riyadh, TUNED] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
 | MPC margin over TUNED at half / twice capacity (Riyadh) *(stated in: Conclusions)* | 15.0 -- 0.4 | `T21v3_riyadh_cth2400/9600 minus T1v3_heldout_cth2400/9600 s_pooled_eq` | difference of unrounded savings | OK |
 
@@ -1310,6 +1631,31 @@ Every file cited above, with the stamp in its `.meta.json` (code sha → tag of 
 | `rbrl_norules5_v3_perwindow.csv` | `rbrl_ppo.py`: evaluate() (policy rollout) -> t1_v2.evaluate() | `rbrl_ppo.py --norules --cities taif --seeds 1 --seed0 46` | `{}` | `5020e03ec6ca` → p6 (c5c2fdb) | 2026-11-12T12:56:15Z | docs/jobs/p6_round4.jsonl:J18_norules_taif_46 |
 | `T17v3_Ba.csv` | `bound_at.py`: main() -> v3_names.B_a / r3_dp.certificate_margin | `bound_at.py` | `{}` | `30ec35b0a020` → p21 (30604b9) | 2026-11-13T17:37:34Z | code/jobs/r21.jsonl:R21_bound_at, docs/jobs/p10_r21_final.jsonl:R21_bound_at, docs/jobs/p12_p12.jsonl:P12_bound_at |
 | `T25v3_cycling_energy.csv` | `cycling_energy.py`: main() -> from_summary() | `cycling_energy.py` | `{}` | `5020e03ec6ca` → p6 (c5c2fdb) | 2026-11-12T14:02:58Z | docs/jobs/p6_round4.jsonl:J23_cycling |
+| `T38_derived_rules.csv` | `rev_minor.py`:  | `rev_minor.py rules` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `be4c0e368faf` → p23 (minor revision: rev_minor, mpc_lambda --admission) | 2026-11-22T12:46:53Z | docs/jobs/p23_minor.jsonl:P23_rules |
+| `T38_derived_rules_perwindow.csv` | `rev_minor.py`:  | `rev_minor.py rules` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `be4c0e368faf` → p23 (minor revision: rev_minor, mpc_lambda --admission) | 2026-11-22T12:46:53Z | docs/jobs/p23_minor.jsonl:P23_rules |
+| `T21v3_pers_csw0.025_riyadh.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city riyadh --horizons 24 --forecast persistence --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:21:58Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.025_riyadh |
+| `T21v3_pers_csw0.025_riyadh_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city riyadh --horizons 24 --forecast persistence --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:21:58Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.025_riyadh |
+| `T39_derived_stats.csv` | `rev_minor.py`:  | `rev_minor.py stats` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `cb8c62f21553` → p24 (minor revision: rev_minor stats) | 2026-11-22T14:46:43Z | docs/jobs/p23_minor.jsonl:P24_stats |
+| `T21v3_csw0.025_jeddah.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:04:25Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.025_jeddah |
+| `T21v3_csw0.025_jeddah_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:04:25Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.025_jeddah |
+| `T21v3_pers_csw0.025_jeddah.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --forecast persistence --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:31:14Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.025_jeddah |
+| `T21v3_pers_csw0.025_jeddah_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --forecast persistence --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:31:14Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.025_jeddah |
+| `T21v3_csw0.025_taif.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:13:07Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.025_taif |
+| `T21v3_csw0.025_taif_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:13:07Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.025_taif |
+| `T21v3_pers_csw0.025_taif.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --forecast persistence --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:39:56Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.025_taif |
+| `T21v3_pers_csw0.025_taif_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --forecast persistence --csw 0.025` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:39:56Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.025_taif |
+| `T21v3_pers_csw0.114_riyadh.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city riyadh --horizons 24 --forecast persistence --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:23:29Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.114_riyadh |
+| `T21v3_pers_csw0.114_riyadh_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city riyadh --horizons 24 --forecast persistence --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:23:29Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.114_riyadh |
+| `T21v3_csw0.114_jeddah.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:04:22Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.114_jeddah |
+| `T21v3_csw0.114_jeddah_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:04:22Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.114_jeddah |
+| `T21v3_pers_csw0.114_jeddah.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --forecast persistence --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:32:35Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.114_jeddah |
+| `T21v3_pers_csw0.114_jeddah_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city jeddah --horizons 24 --forecast persistence --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:32:35Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.114_jeddah |
+| `T21v3_csw0.114_taif.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:13:25Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.114_taif |
+| `T21v3_csw0.114_taif_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:13:25Z | docs/jobs/p23_minor.jsonl:P22_mpc24_csw0.114_taif |
+| `T21v3_pers_csw0.114_taif.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --forecast persistence --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:41:21Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.114_taif |
+| `T21v3_pers_csw0.114_taif_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --forecast persistence --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:41:21Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.114_taif |
+| `T21v3_csw0.114_pwadm_jeddah.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --horizons 24 --admission per_window --city jeddah --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `be4c0e368faf` → p23 (minor revision: rev_minor, mpc_lambda --admission) | 2026-11-22T14:21:09Z | docs/jobs/p23_minor.jsonl:P23_pw_T21v3_csw0.114_jeddah |
+| `T21v3_csw0.114_pwadm_jeddah_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --horizons 24 --admission per_window --city jeddah --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `be4c0e368faf` → p23 (minor revision: rev_minor, mpc_lambda --admission) | 2026-11-22T14:21:09Z | docs/jobs/p23_minor.jsonl:P23_pw_T21v3_csw0.114_jeddah |
 | `T32_setpoint_sens.csv` | `setpoint_sens.py`: main() (THERM shifted on its own Rule C curve) | `setpoint_sens.py` | `{}` | `30ec35b0a020` → p21 (30604b9) | 2026-11-13T17:37:32Z | docs/jobs/p12_p12.jsonl:P13_setpoint |
 | `T33_ppo_hold_gap.csv` | `ppo_hold_gap.py`: main() (saved PPO models vs hold, training cost) | `ppo_hold_gap.py` | `{}` | `5e8bc69a807c` → p20 (f430287) | 2026-11-13T14:25:34Z | docs/jobs/p12_p12.jsonl:P16_hold_gap |
 | `T34_greenriyadh_sens.csv` | `greenriyadh_sens.py`: main() (outdoor dry-bulb shifted, thresholds fixed) | `greenriyadh_sens.py` | `{}` | `30ec35b0a020` → p21 (30604b9) | 2026-11-13T17:37:29Z | docs/jobs/p12_p12.jsonl:P19_greenriyadh |

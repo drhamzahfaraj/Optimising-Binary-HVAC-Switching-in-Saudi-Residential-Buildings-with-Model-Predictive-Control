@@ -1,0 +1,24 @@
+\begin{table*}[t]
+\centering
+\caption{Headline arms at the charges the wear estimate supports, $\csw=0.025$ and $0.114\,\SAR$ per on-command (tariff in force, occupied band $[22,24]\,^\circ$C, $\Delta t=15\,$min, seven held-out windows). Upper block: pooled equalised saving $s$ (\%), every arm refitted at each charge by Rule~A. Lower block: Hodges--Lehmann estimate of the per-window difference (points) for the pre-declared families. $^{b}$fitted at the pooled $0.10\,$K fallback; $^{\mathrm{nr}}$pooled difference under $3$ points, not resolved. Intervals and $p$-values: Supplementary Table~S9; the $0.15\,\SAR$ sensitivity case: Table~\ref{tab:main}.}
+\label{tab:derived}
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
+\toprule
+ & \multicolumn{2}{c}{Riyadh} & \multicolumn{2}{c}{Jeddah} & \multicolumn{2}{c}{Taif} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+$\csw$ ($\SAR$) & $0.025$ & $0.114$ & $0.025$ & $0.114$ & $0.025$ & $0.114$ \\
+\midrule
+TUNED & $3.8$ & $11.0$ & $4.3$ & $12.0$ & $3.9$ & $10.9$ \\
+Guard hysteresis & $1.8$ & $5.0$ & $2.4$ & $6.7$ & $3.5$ & $9.7$ \\
+MPC $24\,$h, perfect & $5.7$ & $16.1$ & $4.7^{b}$ & $13.7^{b}$ & $5.4$ & $14.9$ \\
+MPC $24\,$h, persistence & $4.0^{b}$ & $11.1^{b}$ & $4.8$ & $12.8$ & $3.4^{b}$ & $9.5^{b}$ \\
+$B^{\ast}$ ($V_N$) & $\le6.3$ & $\le17.5$ & $\le6.3$ & $\le17.5$ & $\le6.9$ & $\le18.5$ \\
+\midrule
+F1: TUNED $-$ THERM & $+3.9$ & $+11.1$ & $+4.3$ & $+12.0$ & $+3.8$ & $+10.4$ \\
+F2: MPC $24\,$h, perfect $-$ TUNED & $+2.0^{\mathrm{nr}}$ & $+5.4$ & $+0.5^{\mathrm{nr}}$ & $+1.7^{\mathrm{nr}}$ & $+1.4^{\mathrm{nr}}$ & $+4.0$ \\
+F3: MPC $24\,$h, persistence $-$ TUNED & $+0.1^{\mathrm{nr}}$ & $-0.1^{\mathrm{nr}}$ & $+0.6^{\mathrm{nr}}$ & $+0.8^{\mathrm{nr}}$ & $-0.6^{\mathrm{nr}}$ & $-1.7^{\mathrm{nr}}$ \\
+F4: guard $-$ TUNED & $-2.0^{\mathrm{nr}}$ & $-5.8$ & $-1.9^{\mathrm{nr}}$ & $-5.3$ & $0.0^{\mathrm{nr}}$ & $0.0^{\mathrm{nr}}$ \\
+\bottomrule
+\end{tabular*}
+\end{table*}

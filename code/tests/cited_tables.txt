@@ -206,3 +206,13 @@ T35_day_traces.csv
 T36_decision_time.csv
 # J47  THERM comfort leak per actuation interval and capacity (therm_leak.py, RBRL_TAG _tl<dt>_<cth>)
 T37_therm_leak_*.csv
+# Minor revision: headline arms at the derived charges and the per-window admission criterion (rev_minor.py, mpc_lambda --admission)
+T38_derived_rules.csv
+T38_derived_rules_perwindow.csv
+T39_derived_stats.csv
+T21v3_csw0.025_*.csv
+T21v3_csw0.114_*.csv
+T21v3_pers_csw0.025_*.csv
+T21v3_pers_csw0.114_*.csv
+T21v3_pwadm_*.csv
+T21v3_pers_pwadm_*.csv

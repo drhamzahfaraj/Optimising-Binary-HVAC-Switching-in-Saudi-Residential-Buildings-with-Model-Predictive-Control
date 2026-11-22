@@ -24,7 +24,7 @@ CN = {"riyadh": "Riyadh", "jeddah": "Jeddah", "taif": "Taif"}
 
 # code sha (rbrl_io.code_sha_now over code/*.py) of each tag of the private working repository;
 # results are stamped with the sha of the code that produced them. code/ in this release = p13.
-TAG_OF_SHA = {"34d014b49635": "p22 (7bae2aa)", "30ec35b0a020": "p21 (30604b9)", "5e8bc69a807c": "p20 (f430287)", "c57127b9bfe3": "p19 (c7c3404)", "e2edc1977534": "p18 (1807829)", "e4d7eb184ea5": "p16 (3021d83)", "efbca8c69379": "p15 (d9d14a1)", "4456d5d606cb": "p13 (ad73590)", "0dfeff39fa25": "p12 (280f533)",
+TAG_OF_SHA = {"cb8c62f21553": "p24 (minor revision: rev_minor stats)", "be4c0e368faf": "p23 (minor revision: rev_minor, mpc_lambda --admission)", "34d014b49635": "p22 (7bae2aa)", "30ec35b0a020": "p21 (30604b9)", "5e8bc69a807c": "p20 (f430287)", "c57127b9bfe3": "p19 (c7c3404)", "e2edc1977534": "p18 (1807829)", "e4d7eb184ea5": "p16 (3021d83)", "efbca8c69379": "p15 (d9d14a1)", "4456d5d606cb": "p13 (ad73590)", "0dfeff39fa25": "p12 (280f533)",
               "f8fb2cd89384": "p11 (d9b327f)", "5ca2e0ff7e9d": "p10 (818f270)",
               "746846849b97": "p9 (9ce9142)", "b64c08d6b645": "p8 (d837b4a)",
               "ba2229db8d46": "p7 (989b324)", "5020e03ec6ca": "p6 (c5c2fdb)",
@@ -285,13 +285,6 @@ for (fam, c), v in STATS.items():
     E(L, lab + ": dT~a - dT~b", v[9], "dT_pooled of arm_a and arm_b (T1v3_heldout / T21v3_<c> / T21v3_pers_<c>)", "difference of the two arms' pooled clipped-mean offsets, K",
       lambda g=g, c=c: DTARM[g("arm_a")](c) - DTARM[g("arm_b")](c))
 
-# ================================================================== tab:sota (this work)
-L = "tab:sota"
-E(L, "This work: TUNED Riyadh", "12.5", "T1v3_heldout [riyadh, TUNED, inforce] s_pooled_eq", S_HOW, lambda: one("T1v3_heldout", "s_pooled_eq", city="riyadh", arm="TUNED", tariff="inforce"))
-E(L, "This work: MPC-24 h Riyadh", "18.3", "T21v3_riyadh [24 h, perfect] s_pooled_eq", S_HOW, lambda: one("T21v3_riyadh", "s_pooled_eq", horizon_h=24.0, forecast="perfect"))
-E(L, "This work: bracket low (CLV raw)", "18.0", "T17v3_riyadh clv_s_raw", "clairvoyant schedule vs unshifted THERM", lambda: one("T17v3_riyadh", "clv_s_raw"))
-E(L, "This work: bracket high (B*, printed as the end of 18.0--20.0)", "20.0", "T17v3_riyadh bound_reported", "relaxed dual bound, V_N, rounded up", lambda: one("T17v3_riyadh", "bound_reported"))
-
 # ================================================================== tab:sensitivity (Riyadh)
 L = "tab:sensitivity"
 share = lambda stem, csw, **f: 100 * csw * one(stem, "fs_therm0_mean", **f) / one(stem, "J_therm0_mean", **f)
@@ -549,10 +542,152 @@ E(L, "2027 repricing moves it by (points)", "0.9", "T1v3_heldout [riyadh, TUNED,
 for item, v in (("Riyadh cooling-season diurnal swing (K)", "12.7"), ("Jeddah diurnal swing (K)", "8.4")):
     E(L, item, v, "not in a v3 file: computed from the TMYx weather file in the case-study section (Section 6), not from a results file", "weather statistic", None)
 
+# ================================================================== minor revision: derived charge range, per-window admission
+DER = (0.025, 0.114)
+MR = "T38_derived_rules"
+ST = "T39_derived_stats"
+
+
+def mrule(arm, c, city, adm="pooled", col="s_pooled_eq"):
+    return one(MR, col, city=city, arm=arm, admission=adm, c_sw=c)
+
+
+def mpcd(fc, c, city, adm="pooled", col="s_pooled_eq"):
+    sfx = ("" if abs(c - 0.15) < 1e-12 else f"_csw{c:g}") + ("_pwadm" if adm == "per_window" else "")
+    return one(("T21v3_pers" if fc == "persistence" else "T21v3") + sfx + f"_{city}", col, horizon_h=24.0)
+
+
+def bnd(c, city):
+    return one("T5v3_bound", "bound_reported", city=city, c_sw=c)
+
+
+def stt(c, adm, fam, city, col):
+    return one(ST, col, c_sw=c, admission=adm, family=fam, city=city)
+
+
+def signed(v):
+    t = f"{v:+.1f}"
+    return t[1:] if float(t) == 0 else t
+
+
+L = "tab:derived"
+for c in DER:
+    for city in CITIES:
+        E(L, f"TUNED s, {CN[city]}, c_sw {c:g}", None, f"{MR} [TUNED, pooled, {city}, {c:g}] s_pooled_eq", S_HOW, lambda c=c, city=city: mrule("TUNED", c, city))
+        E(L, f"guard s, {CN[city]}, c_sw {c:g}", None, f"{MR} [guard, pooled, {city}, {c:g}] s_pooled_eq", S_HOW, lambda c=c, city=city: mrule("guard", c, city))
+        E(L, f"MPC-24 perfect s, {CN[city]}, c_sw {c:g}", None, f"T21v3_csw{c:g}_{city} [24 h] s_pooled_eq", S_HOW, lambda c=c, city=city: mpcd("perfect", c, city))
+        E(L, f"MPC-24 persistence s, {CN[city]}, c_sw {c:g}", None, f"T21v3_pers_csw{c:g}_{city} [24 h] s_pooled_eq", S_HOW, lambda c=c, city=city: mpcd("persistence", c, city))
+        E(L, f"B* (V_N), {CN[city]}, c_sw {c:g}", None, f"T5v3_bound [{city}, {c:g}] bound_reported", "relaxed dual bound, V_N, rounded up", lambda c=c, city=city: bnd(c, city))
+        for fam in ("F1", "F2", "F3", "F4"):
+            E(L, f"{fam} HL, {CN[city]}, c_sw {c:g}", None, f"{ST} [{c:g}, pooled, {fam}, {city}] hl", "Hodges-Lehmann estimate (points)",
+              lambda c=c, city=city, fam=fam: signed(stt(c, "pooled", fam, city, "hl")))
+vals = []
+for c in DER:
+    for city in CITIES:
+        vals += [f"{mrule('TUNED', c, city):.1f}", f"{mrule('guard', c, city):.1f}", f"{mpcd('perfect', c, city):.1f}",
+                 f"{mpcd('persistence', c, city):.1f}", f"{bnd(c, city):.1f}"]
+        vals += [signed(stt(c, "pooled", fam, city, "hl")) for fam in ("F1", "F2", "F3", "F4")]
+fill(vals)
+
+L = "S9 tab:s-derived"
+for adm, cs, fams in (("pooled", DER, ("F1", "F2", "F3", "F4")), ("per_window", DER + (0.15,), ("F2", "F3"))):
+    for c in cs:
+        for fam in fams:
+            for city in CITIES:
+                adm_ok = sel(ST, c_sw=c, admission=adm, family=fam, city=city)[0].get("admitted", "True") == "True"
+                if not adm_ok:
+                    E(L, f"{adm} {c:g} {fam} {CN[city]}: not admitted", "no admissible", f"{ST} [{c:g}, {adm}, {fam}, {city}] admitted",
+                      "no admissible MPC fit under the criterion (mpc_lambda writes no file)", lambda: "no admissible")
+                    continue
+                for col in ("hl", "hl_lo", "hl_hi", "d_pooled"):
+                    v = signed(stt(c, adm, fam, city, col))
+                    E(L, f"{adm} {c:g} {fam} {CN[city]}: {col}", v, f"{ST} [{c:g}, {adm}, {fam}, {city}] {col}", "points, signed",
+                      lambda c=c, adm=adm, fam=fam, city=city, col=col: signed(stt(c, adm, fam, city, col)))
+                E(L, f"{adm} {c:g} {fam} {CN[city]}: p_adj", f"{stt(c, adm, fam, city, 'p_adj'):.3f}", f"{ST} [{c:g}, {adm}, {fam}, {city}] p_adj",
+                  "Holm-adjusted exact Wilcoxon p", lambda c=c, adm=adm, fam=fam, city=city: stt(c, adm, fam, city, "p_adj"))
+
+L = "S2 tab:s-protocol"
+E(L, "MPC-24 perfect, per-window criterion, 0.15 SAR (Riyadh, Jeddah)", ("18.3", "18.1"), "T21v3_pwadm_<c> [24 h] s_pooled_eq", S_HOW,
+  lambda: (mpcd("perfect", 0.15, "riyadh", "per_window"), mpcd("perfect", 0.15, "jeddah", "per_window")))
+E(L, "MPC-24 persistence, per-window criterion, 0.15 SAR", ("12.7", "14.6", "-1.0"), "T21v3_pers_pwadm_<c> [24 h] s_pooled_eq", S_HOW,
+  lambda: tuple(mpcd("persistence", 0.15, c, "per_window") for c in CITIES))
+E(L, "F2 pooled difference under the per-window criterion, 0.15 SAR", ("+8.5", "+5.9"), f"{ST} [0.15, per_window, F2] d_pooled", "pooled difference, points",
+  lambda: tuple(stt(0.15, "per_window", "F2", c, "d_pooled") for c in ("riyadh", "jeddah")))
+
+L = "main §8.1 derived"
+E(L, "derived: TUNED at 0.025 (Riyadh, Jeddah, Taif)", ("3.8", "4.3", "3.9"), f"{MR} [TUNED, pooled, 0.025] s_pooled_eq", S_HOW, lambda: tuple(mrule("TUNED", 0.025, c) for c in CITIES))
+E(L, "derived: TUNED at 0.114 (Riyadh, Jeddah, Taif)", ("11.0", "12.0", "10.9"), f"{MR} [TUNED, pooled, 0.114] s_pooled_eq", S_HOW, lambda: tuple(mrule("TUNED", 0.114, c) for c in CITIES))
+E(L, "derived: TUNED on-commands avoided, same at every charge", ("22.8", "24.2", "21.7"), f"{MR} [TUNED, pooled, 0.025 and 0.114] start_sav_eq", "share of on-commands avoided (%)",
+  lambda: tuple(mrule("TUNED", 0.114, c, col="start_sav_eq") for c in CITIES))
+E(L, "derived: guard short of TUNED at 0.114, pooled (Riyadh, Jeddah)", ("5.9", "5.3"), f"{ST} [0.114, pooled, F4] d_pooled", "minus the pooled difference",
+  lambda: tuple(-stt(0.114, "pooled", "F4", c, "d_pooled") for c in ("riyadh", "jeddah")))
+E(L, "derived: MPC-24 perfect at 0.025", ("5.7", "4.7", "5.4"), "T21v3_csw0.025_<c> s_pooled_eq", S_HOW, lambda: tuple(mpcd("perfect", 0.025, c) for c in CITIES))
+E(L, "derived: MPC-24 perfect at 0.114", ("16.1", "13.7", "14.9"), "T21v3_csw0.114_<c> s_pooled_eq", S_HOW, lambda: tuple(mpcd("perfect", 0.114, c) for c in CITIES))
+E(L, "derived: F2 HL at 0.114 (Riyadh, Taif, Jeddah)", ("+5.4", "+4.0", "+1.7"), f"{ST} [0.114, pooled, F2] hl", "Hodges-Lehmann estimate",
+  lambda: tuple(stt(0.114, "pooled", "F2", c, "hl") for c in ("riyadh", "taif", "jeddah")))
+E(L, "derived: Jeddah MPC lam/lam* at 0.025 and 0.114", ("2.6", "2.3"), "T21v3_csw<x>_jeddah lam_over_lam_star", "fitted multiplier ratio",
+  lambda: tuple(mpcd("perfect", c, "jeddah", col="lam_over_lam_star") for c in DER))
+E(L, "derived: Jeddah MPC cooler than THERM (K)", ("0.08", "0.10"), "T21v3_csw<x>_jeddah dT_pooled", "minus the pooled clipped-mean offset",
+  lambda: tuple(-mpcd("perfect", c, "jeddah", col="dT_pooled") for c in (0.114, 0.025)))
+E(L, "derived: Jeddah MPC on-commands avoided (27--28) against 32 at 0.15", ("27", "28", "32"), "T21v3_csw<x>_jeddah / T21v3_jeddah start_sav_eq", "share of on-commands avoided (%)",
+  lambda: (mpcd("perfect", 0.025, "jeddah", col="start_sav_eq"), mpcd("perfect", 0.114, "jeddah", col="start_sav_eq"), mpcd("perfect", 0.15, "jeddah", col="start_sav_eq")))
+E(L, "derived: Jeddah per-window MPC warmer than THERM (K) and its F2 HL", ("0.015", "+5.3"), "T21v3_csw0.114_pwadm_jeddah dT_pooled; T39 [0.114, per_window, F2, jeddah] hl", "offset; HL",
+  lambda: (mpcd("perfect", 0.114, "jeddah", "per_window", "dT_pooled"), stt(0.114, "per_window", "F2", "jeddah", "hl")))
+E(L, "derived: F2 pooled margins at 0.025 (0.4--1.9)", ("0.4", "1.9"), f"{ST} [0.025, pooled, F2] d_pooled", "min..max over cities",
+  lambda: (min(stt(0.025, "pooled", "F2", c, "d_pooled") for c in CITIES), max(stt(0.025, "pooled", "F2", c, "d_pooled") for c in CITIES)))
+E(L, "derived: F3 HL range at both charges (-1.7..+0.8)", ("-1.7", "+0.8"), f"{ST} [0.025 and 0.114, pooled, F3] hl", "min..max over cities and charges",
+  lambda: (min(stt(c, "pooled", "F3", x, "hl") for c in DER for x in CITIES), max(stt(c, "pooled", "F3", x, "hl") for c in DER for x in CITIES)))
+E(L, "derived: B* range at 0.025 and 0.114", ("6.3", "6.9", "17.5", "18.5"), "T5v3_bound bound_reported", "min..max over cities at each charge",
+  lambda: (min(bnd(0.025, c) for c in CITIES), max(bnd(0.025, c) for c in CITIES), min(bnd(0.114, c) for c in CITIES), max(bnd(0.114, c) for c in CITIES)))
+E(L, "derived: share of B* at 0.114, TUNED 59--68, MPC 78--92", ("59", "68", "78", "92"), f"{MR} / T21v3_csw0.114 / T5v3_bound", "s / B* x 100, min..max over cities",
+  lambda: (min(100 * mrule("TUNED", 0.114, c) / bnd(0.114, c) for c in CITIES), max(100 * mrule("TUNED", 0.114, c) / bnd(0.114, c) for c in CITIES),
+           min(100 * mpcd("perfect", 0.114, c) / bnd(0.114, c) for c in CITIES), max(100 * mpcd("perfect", 0.114, c) / bnd(0.114, c) for c in CITIES)))
+
+L = "main §10.4 per-window admission"
+E(L, "per-window: MPC-24 perfect at 0.025 and 0.114 (Riyadh, Jeddah)", ("5.0", "5.7", "13.7", "15.9"), "T21v3_csw<x>_pwadm_<c> s_pooled_eq", S_HOW,
+  lambda: tuple(mpcd("perfect", c, x, "per_window") for c in DER for x in ("riyadh", "jeddah")))
+E(L, "per-window: TUNED at 0.025 and 0.114 (Riyadh, Jeddah)", ("3.0", "3.8", "8.5", "10.8"), f"{MR} [TUNED, per_window] s_pooled_eq", S_HOW,
+  lambda: tuple(mrule("TUNED", c, x, "per_window") for c in DER for x in ("riyadh", "jeddah")))
+E(L, "per-window: F2 pooled margins at 0.025 (2.0, 1.8) and 0.114 (5.2)", ("2.0", "1.8", "5.2"), f"{ST} [per_window, F2] d_pooled", "pooled difference",
+  lambda: (stt(0.025, "per_window", "F2", "riyadh", "d_pooled"), stt(0.025, "per_window", "F2", "jeddah", "d_pooled"), stt(0.114, "per_window", "F2", "riyadh", "d_pooled")))
+E(L, "per-window: F2 pooled margins at 0.15 (8.5, 5.9) against pooled criterion (5.7, 4.4)", ("8.5", "5.9", "5.7", "4.4"), f"{ST} [0.15, per_window / pooled, F2] d_pooled", "pooled difference",
+  lambda: (stt(0.15, "per_window", "F2", "riyadh", "d_pooled"), stt(0.15, "per_window", "F2", "jeddah", "d_pooled"), stt(0.15, "pooled", "F2", "riyadh", "d_pooled"), stt(0.15, "pooled", "F2", "jeddah", "d_pooled")))
+E(L, "per-window: MPC offsets from THERM (-0.05..+0.01 K)", ("-0.05", "+0.01"), "T21v3*_pwadm_<c> dT_pooled (perfect)", "min..max over cities and charges",
+  lambda: (min(mpcd("perfect", c, x, "per_window", "dT_pooled") for c in DER + (0.15,) for x in ("riyadh", "jeddah")),
+           max(mpcd("perfect", c, x, "per_window", "dT_pooled") for c in DER + (0.15,) for x in ("riyadh", "jeddah"))))
+E(L, "per-window: persistence pooled margin +3.0 (Riyadh 0.15) and lowest -4.9", ("+3.0", "-4.9"), f"{ST} [per_window, F3] d_pooled", "pooled difference",
+  lambda: (stt(0.15, "per_window", "F3", "riyadh", "d_pooled"), min(stt(c, "per_window", "F3", x, "d_pooled") for c in DER + (0.15,) for x in CITIES)))
+
+L = "abstract + conclusions"
+E(L, "abstract: TUNED at the derived charges", ("3.8", "4.3", "10.9", "12.0"), f"{MR} [TUNED, pooled] s_pooled_eq", "min..max over cities at each charge",
+  lambda: (min(mrule("TUNED", 0.025, c) for c in CITIES), max(mrule("TUNED", 0.025, c) for c in CITIES), min(mrule("TUNED", 0.114, c) for c in CITIES), max(mrule("TUNED", 0.114, c) for c in CITIES)))
+E(L, "abstract: MPC adds 5.4 and 4.0 at 0.114; per-window Jeddah 5.3", ("5.4", "4.0", "5.3"), f"{ST} hl", "Hodges-Lehmann estimates",
+  lambda: (stt(0.114, "pooled", "F2", "riyadh", "hl"), stt(0.114, "pooled", "F2", "taif", "hl"), stt(0.114, "per_window", "F2", "jeddah", "hl")))
+E(L, "abstract: bound over the supported charges", ("6.3", "6.9", "17.5", "18.5"), "T5v3_bound bound_reported", "min..max over cities at each charge",
+  lambda: (min(bnd(0.025, c) for c in CITIES), max(bnd(0.025, c) for c in CITIES), min(bnd(0.114, c) for c in CITIES), max(bnd(0.114, c) for c in CITIES)))
+E(L, "conclusions: MPC-24 perfect avoids 27--34 % of on-commands at the derived charges", ("27", "34"), "T21v3_csw<x>_<c> start_sav_eq", "min..max over cities and charges",
+  lambda: (min(mpcd("perfect", c, x, col="start_sav_eq") for c in DER for x in CITIES), max(mpcd("perfect", c, x, col="start_sav_eq") for c in DER for x in CITIES)))
+E(L, "conclusions: per-window margin at 0.114 (Riyadh 5.2, Jeddah 5.3)", ("5.2", "5.3"), f"{ST} [0.114, per_window, F2] hl", "Hodges-Lehmann estimate",
+  lambda: (stt(0.114, "per_window", "F2", "riyadh", "hl"), stt(0.114, "per_window", "F2", "jeddah", "hl")))
+E(L, "conclusions: guard cost at 0.114 (5.9, 5.3)", ("5.9", "5.3"), f"{ST} [0.114, pooled, F4] d_pooled", "minus the pooled difference",
+  lambda: tuple(-stt(0.114, "pooled", "F4", c, "d_pooled") for c in ("riyadh", "jeddah")))
+
+L = "main §10.3 what governs"
+E(L, "controller class at 0.114 (11; guard 5.0, TUNED 11.0, MPC 16.1) and at 0.025 (4)", ("11", "5.0", "11.0", "16.1", "4"), f"{MR} / T21v3_csw<x>_riyadh s_pooled_eq", "Riyadh; MPC minus guard, unrounded",
+  lambda: (mpcd("perfect", 0.114, "riyadh") - mrule("guard", 0.114, "riyadh"), mrule("guard", 0.114, "riyadh"), mrule("TUNED", 0.114, "riyadh"), mpcd("perfect", 0.114, "riyadh"),
+           mpcd("perfect", 0.025, "riyadh") - mrule("guard", 0.025, "riyadh")))
+
+L = "tab:sota"
+E(L, "This work: TUNED Riyadh 3.8--11.0", ("3.8", "11.0"), f"{MR} [TUNED, pooled, riyadh] s_pooled_eq", S_HOW, lambda: (mrule("TUNED", 0.025, "riyadh"), mrule("TUNED", 0.114, "riyadh")))
+E(L, "This work: MPC-24 h Riyadh 5.7--16.1", ("5.7", "16.1"), "T21v3_csw<x>_riyadh s_pooled_eq", S_HOW, lambda: (mpcd("perfect", 0.025, "riyadh"), mpcd("perfect", 0.114, "riyadh")))
+E(L, "This work: bound Riyadh 6.3--17.5", ("6.3", "17.5"), "T5v3_bound [riyadh] bound_reported", "relaxed dual bound, V_N, rounded up", lambda: (bnd(0.025, "riyadh"), bnd(0.114, "riyadh")))
+L = "main §9.1 comparison text"
+E(L, "sota text: at 0.15 TUNED, MPC-24 and the bracket (12.5, 18.3, 18.0--20.0)", ("12.5", "18.3", "18.0", "20.0"), "T1v3_heldout / T21v3_riyadh / T17v3_riyadh", "values at the 0.15 SAR sensitivity case",
+  lambda: (one("T1v3_heldout", "s_pooled_eq", city="riyadh", arm="TUNED", tariff="inforce"), one("T21v3_riyadh", "s_pooled_eq", horizon_h=24.0, forecast="perfect"),
+           one("T17v3_riyadh", "clv_s_raw"), one("T17v3_riyadh", "bound_reported")))
+
 # ================================================================== abstract / conclusions
 L = "abstract + conclusions"
-E(L, "abstract: best attainable saving about 17--21 % (min CLV raw .. max B*)", ("17", "21"), "T17v3_<c> clv_s_raw, bound_reported", "min over cities of the clairvoyant saving and max of B*, rounded to integers",
-  lambda: (min(one(f"T17v3_{c}", "clv_s_raw") for c in CITIES), max(one(f"T17v3_{c}", "bound_reported") for c in CITIES)))
 E(L, "fitted deadband R1 - R2 (min..max over cities)", ("1.32", "1.36"), "T1v3_heldout [TUNED, inforce] params.on - params.off", "TUNED switch points R1 - R2 (degC)",
   lambda: (min(json.loads(r["params"])["on"] - json.loads(r["params"])["off"] for r in sel("T1v3_heldout", arm="TUNED", tariff="inforce")),
            max(json.loads(r["params"])["on"] - json.loads(r["params"])["off"] for r in sel("T1v3_heldout", arm="TUNED", tariff="inforce"))))
@@ -565,8 +700,6 @@ E(L, "TUNED SAR/season at 0.025--0.114 (2--19)", ("2", "19"), "T1v3_perwindow [T
 E(L, "TUNED cost saving 12.4--13.6", ("12.4", "13.6"), "T1v3_heldout [TUNED, inforce] s_pooled_eq", "min..max over cities",
   lambda: (min(float(r["s_pooled_eq"]) for r in sel("T1v3_heldout", arm="TUNED", tariff="inforce")), max(float(r["s_pooled_eq"]) for r in sel("T1v3_heldout", arm="TUNED", tariff="inforce"))))
 E(L, "TUNED against a 1.25 C comparator (Riyadh)", "5.7", "T7v3_deadband [riyadh, 1.25] s_pooled_eq", S_HOW, lambda: one("T7v3_deadband", "s_pooled_eq", city="riyadh", deadband=1.25))
-E(L, "MPC-24 perfect avoids 30--33 % of on-commands", ("30", "33"), "T21v3_<c> [24 h, perfect] start_sav_eq", "min..max over cities",
-  lambda: (min(one(f"T21v3_{c}", "start_sav_eq", horizon_h=24.0, forecast="perfect") for c in CITIES), max(one(f"T21v3_{c}", "start_sav_eq", horizon_h=24.0, forecast="perfect") for c in CITIES)))
 E(L, "TUNED at half / twice capacity (Riyadh)", ("-2.8", "15.8"), "T1v3_heldout_cth2400 / _cth9600 [riyadh, TUNED] s_pooled_eq", S_HOW,
   lambda: (one("T1v3_heldout_cth2400", "s_pooled_eq", city="riyadh", arm="TUNED", tariff="inforce"), one("T1v3_heldout_cth9600", "s_pooled_eq", city="riyadh", arm="TUNED", tariff="inforce")))
 E(L, "MPC margin over TUNED at half / twice capacity (Riyadh)", ("15.0", "0.4"), "T21v3_riyadh_cth2400/9600 minus T1v3_heldout_cth2400/9600 s_pooled_eq", "difference of unrounded savings",
@@ -759,10 +892,13 @@ SECS = {
     "comparator deadband moves": ["What Governs the Saving"], "controller class moves": ["What Governs the Saving"],
     "charge per on-command moves": ["What Governs the Saving"], "2027 repricing moves": ["What Governs the Saving"],
     "Riyadh cooling-season diurnal swing": ["Climate Profiles", "Generalisability"], "Jeddah diurnal swing": ["Climate Profiles", "Generalisability"],
-    "abstract: best attainable": ["Abstract"], "fitted deadband R1 - R2": ["Conclusions"],
+    "fitted deadband R1 - R2": ["Conclusions"],
+    "abstract: ": ["Abstract"], "derived: ": ["Headline Results at the Supported Charge"],
+    "per-window: ": ["Limitations"], "sota text: ": ["State-of-the-Art Comparison"],
+    "controller class at 0.114": ["What Governs the Saving"],
     "on-commands avoided by TUNED (22--24)": ["Abstract", "Conclusions"], "TUNED electricity within": ["Conclusions"],
     "TUNED SAR/season": ["Conclusions"], "TUNED cost saving 12.4--13.6": ["Abstract"],
-    "TUNED against a 1.25 C comparator": ["Conclusions"], "MPC-24 perfect avoids 30--33": ["Conclusions"],
+    "TUNED against a 1.25 C comparator": ["Conclusions"],
     "TUNED at half / twice capacity": ["Where the MPC Margin Comes From"], "MPC margin over TUNED at half": ["Conclusions"],
     "multi-zone TUNED 11.7--13.6": ["Conclusions", "Multi-Zone Dwellings"], "electricity per 0.1 K warmer": ["Conclusions"],
     "conclusions: ": ["Conclusions"],

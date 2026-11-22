@@ -1,0 +1,22 @@
+{
+ "code_sha": "be4c0e368faf",
+ "code_sha_at_write": "be4c0e368faf",
+ "code_changed_during_run": false,
+ "git": "ac68af9",
+ "impl": "mpc_lambda.py",
+ "argv": "mpc_lambda.py --horizons 24 --admission per_window --city jeddah --forecast persistence",
+ "env": {
+  "RBRL_RESULTS": "/opt/rbrl_p12/results"
+ },
+ "inputs": {
+  "../rbrl_p12/results/tuned_params_v2.json": "018af48fb56ba521",
+  "riyadh.epw": "a2e88409591c158f",
+  "jeddah.epw": "690cae887558f09e",
+  "taif.epw": "dc35449564eea0ae"
+ },
+ "python": "3.13.18",
+ "numpy": "2.5.3",
+ "host": "vm",
+ "pid": 1232,
+ "utc": "2026-11-22T13:24:50Z"
+}

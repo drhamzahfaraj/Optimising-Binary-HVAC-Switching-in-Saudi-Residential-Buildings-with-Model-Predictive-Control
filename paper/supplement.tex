@@ -41,7 +41,7 @@ and the model's calibration status are discussed in the main text, Section~10.1.
 $500$ and $1{,}200\,\text{kJ/K}$ give per-interval excursions of $93.3$, $14.4$ and $6.00\,^\circ$C and violate the main text's actuation condition, so a sweep there would compare configurations that admit no comfort-feasible schedule. Table~S1(b) spans the capacities around the reference at $\Delta t=15\,$min and marks each by the two-sided condition (8) of the main text: its lower limit needs $\Cth\ge\Qhvac\Delta t/\deadband=1{,}800\,\text{kJ/K}$, and its upper limit, with the one-interval warming excursion at the $690\,$W peak load, is $0.99\,^\circ$C at $2{,}400\,\text{kJ/K}$, so THERM's $1\,^\circ$C deadband fails it narrowly there and leaks $0.124$ occupied degree-hours. THERM's comfort record is reported in every row so that an infeasible configuration cannot be mistaken for a cheap one. The headline $4{,}800\,\text{kJ/K}$ is $50\,\text{kJ}\, \text{m}^{-2}\text{K}^{-1}$ over $96\,\text{m}^2$ of participating surface, which gives a time constant of $56\,$h and a free-float time across the $2\,$K band of $4.3\,$h at the ninety-fifth percentile of seasonal load and $8.0\,$h at the median. ISO~13786's areal capacity is a $24\,$h quantity; the capacity effective at the cycle period is lower.
 
 \paragraph{Actuation interval.} With the exact update the interval carries no
-integration error; it decides how often a controller may act and whether THERM can hold its own deadband. THERM begins to leak at $30\,$min and fails at $1\,$h, where the two arms are no longer held to the same constraint. The saving is \emph{not} independent of the interval. A finer interval lets the tuned thermostat widen its deadband (to $1.78$--$1.79\,^\circ$C at $5\,$min, against $0.94$--$0.99\,^\circ$C at $30\,$min) while THERM keeps its fixed one (Table~S1(a)). TUNED saves about $25\%$ at $5\,$min and $-1.2$ to $-1.5\%$ at $30\,$min (main text, Section~9.3 and Table~8), where THERM's deadband fails the upper limit of (8) narrowly ($0.99\,^\circ$C) and THERM leaks. Comparisons with studies at a different interval must take that into account.
+integration error; it decides how often a controller may act and whether THERM can hold its own deadband. THERM begins to leak at $30\,$min and fails at $1\,$h, where the two arms are no longer held to the same constraint. The saving is \emph{not} independent of the interval. A finer interval lets the tuned thermostat widen its deadband (to $1.78$--$1.79\,^\circ$C at $5\,$min, against $0.94$--$0.99\,^\circ$C at $30\,$min) while THERM keeps its fixed one (Table~S1(a)). TUNED saves about $25\%$ at $5\,$min and $-1.2$ to $-1.5\%$ at $30\,$min (main text, Section~9.3 and Table~9), where THERM's deadband fails the upper limit of (8) narrowly ($0.99\,^\circ$C) and THERM leaks. Comparisons with studies at a different interval must take that into account.
 
 \begin{table}[!ht]
 \centering
@@ -97,7 +97,7 @@ Under constant drift each linear phase of a cycle averages to the midpoint of it
 \begin{table}[!ht]
 \centering
 \caption{Protocol and device sensitivity, pooled equalised saving per city.
-$^{b}$fitted at the pooled $0.10\,$K fallback. MPC was not refitted under the per-window criterion.}
+$^{b}$fitted at the pooled $0.10\,$K fallback. The per-window MPC rows are also given at the derived charges, with their tests, in Table~\ref{tab:s-derived}.}
 \label{tab:s-protocol}
 \small
 \begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
@@ -107,6 +107,9 @@ Variant & Riyadh / Jeddah / Taif \\
 TUNED refitted under a per-window $0.03\,$K criterion & $9.7$ / $12.2$ / $4.0$ \\
 Guard refitted under a per-window $0.03\,$K criterion & $5.8$ / $5.9$ / $7.8^{b}$ \\
 F4 (guard $-$ TUNED) under that criterion & $-4.0$ / $-6.3$ / $+3.8$ \\
+MPC $24\,$h, perfect, refitted under that criterion & $18.3$ / $18.1$ / no admissible fit \\
+MPC $24\,$h, persistence, refitted under that criterion & $12.7$ / $14.6$ / $-1.0$ (back-off $0.5\,$K) \\
+F2 (MPC $24\,$h, perfect $-$ TUNED) under that criterion & $+8.5$ / $+5.9$ / --- \\
 TUNED on a $0.1\,^\circ$C hardware grid (all at $23.6/22.4$) & $5.7$ / $7.4$ / $8.4$ \\
 Rule~C, cheapest vs dearest crossing: TUNED & $12.5$--$13.7$ / $13.6$--$14.4$ / $12.4$ (both) \\
 Rule~C, cheapest vs dearest crossing: MPC-$24\,$h (perfect) & $18.3$--$19.0$ / $18.1$--$18.4$ / $16.9$--$17.4$ \\
@@ -262,11 +265,11 @@ reported saving, with the evidence in this study.}
 \toprule
 Idealisation & Direction & Evidence \\
 \midrule
-Comparator deadband assumed $1\,^\circ$C & overstates if wider & $5.7\%$ against $1.25\,^\circ$C (main Table~7(c)) \\
-Charge $0.15\,\SAR$ per on-command & overstates & $3.8$--$11.0\%$ at $0.025$--$0.114\,\SAR$ (Table~7(b)) \\
+Comparator deadband assumed $1\,^\circ$C & overstates if wider & $5.7\%$ against $1.25\,^\circ$C (main Table~8(c)) \\
+Charge per on-command, $0.15\,\SAR$ sensitivity case & overstates & the headline arms are reported at the derived $0.025$--$0.114\,\SAR$ (main Table~3): TUNED $3.8$--$11.0\%$ in Riyadh \\
 Switch points on a $0.01\,^\circ$C grid & overstates & $5.7$--$8.4\%$ on a $0.1\,^\circ$C grid (Table~S2) \\
-Reference capacity ($24\,$h ISO value) & probably overstates & $-2.8\%$ at $2{,}400\,\text{kJ/K}$ (Table~7(d)); MPC-$24\,$h also falls, to $12.2\%$ \\
-Actuation step $15\,$min & either way & about $25\%$ at $5\,$min, $-1.2$ to $-1.5\%$ at $30\,$min (Table~8) \\
+Reference capacity ($24\,$h ISO value) & probably overstates & $-2.8\%$ at $2{,}400\,\text{kJ/K}$ (Table~8(d)); MPC-$24\,$h also falls, to $12.2\%$ \\
+Actuation step $15\,$min & either way & about $25\%$ at $5\,$min, $-1.2$ to $-1.5\%$ at $30\,$min (Table~9) \\
 Admission tolerance pooled $0.03\,$K & either way & $9.7$, $12.2$, $4.0\%$ under a per-window criterion (Table~S2) \\
 Rule~C cheapest crossing & understates & THERM self-scores $-0.8$, $-0.1$, $0.0\%$ (Table~S2) \\
 No start-up energy & understates energy saving & $0.33$--$0.90\%$ for $10$--$25\,$Wh per start (main Section~10.4) \\
@@ -283,7 +286,7 @@ The four pre-declared families of the main text, Section~7, with each contrast's
 
 \begin{table}[!ht]
 \centering
-\caption{Pre-declared paired comparisons (main text, Section~7): per-window difference of the equalised savings, $n=7$ held-out windows per city. Hodges--Lehmann estimate with its exact $95.3\%$ interval, exact two-sided Wilcoxon signed-rank and sign tests; Holm within each three-city family (F1--F4). At $n=7$ the smallest exact two-sided $p$ is $0.016$ and the smallest Holm-adjusted $p$ in a three-member family is $0.047$. Pooled differences below $3$ points are not resolved (n.r.), regardless of the test result; res.\ = resolved. Pooled $\Delta s$ is computed before rounding. $\Delta\tilde T_a-\Delta\tilde T_b$: difference of the two arms' pooled clipped-mean offsets (K). $^{b}$first arm fitted at the pooled $0.10\,$K fallback.}
+\caption{Pre-declared paired comparisons (main text, Section~7) at the $\csw=0.15\,\SAR$ sensitivity case (the derived charges are in Table~\ref{tab:s-derived}): per-window difference of the equalised savings, $n=7$ held-out windows per city. Hodges--Lehmann estimate with its exact $95.3\%$ interval, exact two-sided Wilcoxon signed-rank and sign tests; Holm within each three-city family (F1--F4). At $n=7$ the smallest exact two-sided $p$ is $0.016$ and the smallest Holm-adjusted $p$ in a three-member family is $0.047$. Pooled differences below $3$ points are not resolved (n.r.), regardless of the test result; res.\ = resolved. Pooled $\Delta s$ is computed before rounding. $\Delta\tilde T_a-\Delta\tilde T_b$: difference of the two arms' pooled clipped-mean offsets (K). $^{b}$first arm fitted at the pooled $0.10\,$K fallback.}
 \label{tab:s-stats}
 \footnotesize\setlength{\tabcolsep}{3pt}
 \begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}Xlrrrrrlr@{}}
@@ -302,6 +305,67 @@ F3 & MPC-24 (persistence) vs TUNED & Riyadh$^{b}$ & $-0.1$ [$-2.9$, $+2.7$] & 3/
 F4 & guard vs TUNED & Riyadh & $-6.6$ [$-7.7$, $-5.6$] & 0/7 & $0.016$ & $0.016$ & $0.047$ & $-6.8$ (res.) & $+0.025$ \\
  &  & Jeddah & $-6.0$ [$-6.8$, $-5.2$] & 0/7 & $0.016$ & $0.016$ & $0.047$ & $-6.0$ (res.) & $+0.006$ \\
  &  & Taif & $+0.0$ [$-3.0$, $+0.1$] & 5/2 & $0.938$ & $0.453$ & $0.938$ & $-1.4$ (n.r.) & $+0.051$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Derived charge range and per-window admission}
+\label{sec:s-derived}
+
+Table~\ref{tab:s-derived} gives the paired comparisons behind main Table~3, at the two ends of the derived charge range, and the comparisons of both $24\,$h MPC arms with TUNED when all three are refitted under the per-window $0.03\,$K criterion, which requires the comfort match in every tuning week rather than in their pooled mean (main Section~10.4). Under that criterion Holm's correction runs over the cities in which both arms are admitted, so with two cities the smallest adjusted $p$ is $0.031$.
+
+\begin{table}[!ht]
+\centering
+\caption{Paired comparisons at the derived charges ($\csw=0.025$ and $0.114\,\SAR$, every arm refitted by Rule~A) and under the per-window $0.03\,$K admission criterion (TUNED and both MPC arms refitted under it, at $0.025$, $0.114$ and $0.15\,\SAR$). Per-window difference of the equalised savings, $n=7$ held-out windows; Hodges--Lehmann estimate with its exact $95.3\%$ interval, windows with positive/negative difference, Holm-adjusted exact Wilcoxon $p$ within each three-city family, pooled difference (points). $^{b}$an arm fitted at the $0.10\,$K fallback. Pooled differences under $3$ points are not resolved.}
+\label{tab:s-derived}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}llXrrrr@{}}
+\toprule
+Criterion, $\csw$ & Family & City & HL [95.3\% CI] & $+/-$ & $p_{\mathrm{adj}}$ & Pooled $\Delta s$ \\
+\midrule
+Pooled, $0.025$ & F1 & Riyadh & $+3.9$ [$+3.5$, $+4.2$] & 7/0 & $0.047$ & $+3.8$ (res.) \\
+ &  & Jeddah & $+4.3$ [$+3.8$, $+4.8$] & 7/0 & $0.047$ & $+4.3$ (res.) \\
+ &  & Taif & $+3.8$ [$+3.4$, $+4.6$] & 7/0 & $0.047$ & $+3.9$ (res.) \\
+ & F2 & Riyadh & $+2.0$ [$+1.1$, $+2.5$] & 7/0 & $0.047$ & $+1.9$ (n.r.) \\
+ &  & Jeddah & $+0.5$ [$+0.1$, $+0.7$] & 6/1 & $0.047$ & $+0.4^{b}$ (n.r.) \\
+ &  & Taif & $+1.4$ [$+0.6$, $+2.5$] & 7/0 & $0.047$ & $+1.4$ (n.r.) \\
+ & F3 & Riyadh & $+0.1$ [$-0.8$, $+1.0$] & 4/3 & $0.938$ & $+0.2^{b}$ (n.r.) \\
+ &  & Jeddah & $+0.6$ [$0.0$, $+1.1$] & 5/2 & $0.234$ & $+0.5$ (n.r.) \\
+ &  & Taif & $-0.6$ [$-1.9$, $+0.4$] & 1/6 & $0.234$ & $-0.5^{b}$ (n.r.) \\
+ & F4 & Riyadh & $-2.0$ [$-2.4$, $-1.7$] & 0/7 & $0.047$ & $-2.1$ (n.r.) \\
+ &  & Jeddah & $-1.9$ [$-2.1$, $-1.6$] & 0/7 & $0.047$ & $-1.9$ (n.r.) \\
+ &  & Taif & $0.0$ [$-1.0$, $0.0$] & 4/3 & $1.000$ & $-0.5$ (n.r.) \\
+Pooled, $0.114$ & F1 & Riyadh & $+11.1$ [$+10.0$, $+12.1$] & 7/0 & $0.047$ & $+11.0$ (res.) \\
+ &  & Jeddah & $+12.0$ [$+10.8$, $+13.4$] & 7/0 & $0.047$ & $+12.0$ (res.) \\
+ &  & Taif & $+10.4$ [$+9.4$, $+12.7$] & 7/0 & $0.047$ & $+10.9$ (res.) \\
+ & F2 & Riyadh & $+5.4$ [$+3.3$, $+6.8$] & 7/0 & $0.047$ & $+5.1$ (res.) \\
+ &  & Jeddah & $+1.7$ [$-0.1$, $+3.5$] & 5/2 & $0.078$ & $+1.8^{b}$ (n.r.) \\
+ &  & Taif & $+4.0$ [$+1.8$, $+7.0$] & 7/0 & $0.047$ & $+4.0$ (res.) \\
+ & F3 & Riyadh & $-0.1$ [$-2.6$, $+2.4$] & 3/4 & $0.812$ & $+0.2^{b}$ (n.r.) \\
+ &  & Jeddah & $+0.8$ [$-0.4$, $+1.9$] & 4/3 & $0.438$ & $+0.9$ (n.r.) \\
+ &  & Taif & $-1.7$ [$-5.1$, $+1.1$] & 1/6 & $0.328$ & $-1.4^{b}$ (n.r.) \\
+ & F4 & Riyadh & $-5.8$ [$-6.8$, $-4.9$] & 0/7 & $0.047$ & $-5.9$ (res.) \\
+ &  & Jeddah & $-5.3$ [$-5.9$, $-4.6$] & 0/7 & $0.047$ & $-5.3$ (res.) \\
+ &  & Taif & $0.0$ [$-2.6$, $+0.1$] & 5/2 & $0.938$ & $-1.2$ (n.r.) \\
+Per-window, $0.025$ & F2 & Riyadh & $+2.0$ [$+1.4$, $+2.5$] & 7/0 & $0.031$ & $+2.0^{b}$ (n.r.) \\
+ &  & Jeddah & $+1.9$ [$+1.5$, $+2.2$] & 7/0 & $0.031$ & $+1.8^{b}$ (n.r.) \\
+ &  & Taif & \multicolumn{4}{l}{no admissible MPC fit under this criterion} \\
+ & F3 & Riyadh & $-1.4$ [$-1.9$, $-0.7$] & 0/7 & $0.047$ & $-1.4^{b}$ (n.r.) \\
+ &  & Jeddah & $+1.0$ [$0.0$, $+1.8$] & 5/2 & $0.078$ & $+0.9^{b}$ (n.r.) \\
+ &  & Taif & $-1.0$ [$-4.3$, $-0.4$] & 1/6 & $0.062$ & $-1.6^{b}$ (n.r.) \\
+Per-window, $0.114$ & F2 & Riyadh & $+5.2$ [$+2.0$, $+6.8$] & 6/1 & $0.031$ & $+5.2^{b}$ (res.) \\
+ &  & Jeddah & $+5.3$ [$+4.1$, $+6.0$] & 7/0 & $0.031$ & $+5.2^{b}$ (res.) \\
+ &  & Taif & \multicolumn{4}{l}{no admissible MPC fit under this criterion} \\
+ & F3 & Riyadh & $-4.4$ [$-6.3$, $-2.9$] & 0/7 & $0.047$ & $-4.6^{b}$ (res.) \\
+ &  & Jeddah & $+2.1$ [$0.0$, $+3.9$] & 5/2 & $0.078$ & $+2.1^{b}$ (n.r.) \\
+ &  & Taif & $-2.9$ [$-12.1$, $-1.1$] & 1/6 & $0.062$ & $-4.3^{b}$ (res.) \\
+Per-window, $0.15$ & F2 & Riyadh & $+8.9$ [$+6.7$, $+10.4$] & 7/0 & $0.031$ & $+8.5^{b}$ (res.) \\
+ &  & Jeddah & $+6.0$ [$+4.7$, $+6.9$] & 7/0 & $0.031$ & $+5.9^{b}$ (res.) \\
+ &  & Taif & \multicolumn{4}{l}{no admissible MPC fit under this criterion} \\
+ & F3 & Riyadh & $+2.5$ [$+1.2$, $+4.6$] & 7/0 & $0.047$ & $+3.0^{b}$ (res.) \\
+ &  & Jeddah & $+2.4$ [$0.0$, $+4.5$] & 5/2 & $0.078$ & $+2.4^{b}$ (n.r.) \\
+ &  & Taif & $-3.2$ [$-13.8$, $-1.2$] & 1/6 & $0.062$ & $-4.9^{b}$ (res.) \\
 \bottomrule
 \end{tabularx}
 \end{table}

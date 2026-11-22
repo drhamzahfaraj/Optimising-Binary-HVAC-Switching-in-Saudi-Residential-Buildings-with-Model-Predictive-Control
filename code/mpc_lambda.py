@@ -530,6 +530,9 @@ def main(argv=None):
     ap.add_argument("--rule-on", type=float, default=None, help="R1 of the in-rules MPC (implies --ruled)")
     ap.add_argument("--rule-off", type=float, default=None, help="R2 of the in-rules MPC (implies --ruled)")
     ap.add_argument("--ruled", action="store_true", help="MPC inside R1-R2 (C4c)")
+    ap.add_argument("--admission", default="pooled", choices=("pooled", "per_window"),
+                    help="lam-fit comfort criterion: pooled 0.03 K (Rule A4, headline) or the per-window "
+                         "0.03 K criterion of t1_sens.select_per_window; output suffix _pwadm")
     # --cth X is consumed before import (RBRL_CTH); listed here for --help only
     a = ap.parse_args(argv)
     H.check_scenario_tag()
@@ -543,6 +546,14 @@ def main(argv=None):
         F.C_SW = a.csw                       # read at call time by mpc_lams, THERM and equalise
     city = a.city
     sfx = scenario_suffix(F.C_SW, a.lam_scale, a.rule_on, a.rule_off)
+    if a.admission == "per_window":
+        if a.lam_from or a.lam_scale is not None or RULED[0]:
+            ap.error("--admission per_window refits lam: not with --lam-from, --lam-scale or in-rules MPC")
+        sfx += "_pwadm"
+        import t1_sens as SENS
+        SELECT = lambda cands, rows: SENS.select_per_window(a.city, PRICE, cands, rows)
+    else:
+        SELECT = None
     out = (a.out + sfx) if a.out else V.mpc_stem(a.forecast, RULED[0], a.ngrid != HEADLINE_NGRID, sfx)
     hours_list = [float(x) for x in a.horizons.split(",")]
     for hh in hours_list:
@@ -581,7 +592,7 @@ def main(argv=None):
             lam, pooled, status, BACKOFF[0] = prior[hh]
         else:
             lam, pooled, _, status = fit_lambda(city, hh, th, a.ngrid, log, forecast=a.forecast,
-                                                with_status=True)
+                                                with_status=True, select=SELECT)
         if lam is None:
             log(f"{city} H={hh:g}h forecast={a.forecast}: no admissible lam (fit_status=none)")
             flush_log(); continue
@@ -593,7 +604,7 @@ def main(argv=None):
                    grid_h_min=min(ghs), grid_h_max=max(ghs), c_sw=F.C_SW, c_th=C_TH,
                    ruled=RULED[0], rule_on=RULE_ON if RULED[0] else "", rule_off=RULE_OFF if RULED[0] else "",
                    lam=lam, lam_star=lstar, lam_over_lam_star=lam / lstar, lam_scale=a.lam_scale or "",
-                   relaxed_pooled=pooled, fit_status=status,
+                   relaxed_pooled=pooled, fit_status=status, admission=a.admission,
                    tuned_on=base[0], tuned_off=base[1], tuned_src=TUNED_SHA[city][0],
                    tuned_sha=TUNED_SHA[city][1], **s,
                    knob="backoff" if BACKOFF[0] else "lambda", backoff=BACKOFF[0])
@@ -601,7 +612,7 @@ def main(argv=None):
         for r in pw:
             perw.append(dict(city=city, horizon_h=hh, forecast=a.forecast, n_grid=a.ngrid,
                              grid_h=runs[r["window"]]["grid_h"], c_sw=F.C_SW, c_th=C_TH, lam=lam,
-                             lam_over_lam_star=lam / lstar, fit_status=status, **r,
+                             lam_over_lam_star=lam / lstar, fit_status=status, admission=a.admission, **r,
                              knob="backoff" if BACKOFF[0] else "lambda", backoff=BACKOFF[0]))
         log(f"{city} H={hh:g}h {a.forecast} n={a.ngrid} lam={lam:.4f} ({lam / lstar:.3f} lam*) {status} "
             f"knob={'backoff b=%.3f' % BACKOFF[0] if BACKOFF[0] else 'lambda'} "

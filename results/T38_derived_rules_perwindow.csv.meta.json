@@ -1,0 +1,21 @@
+{
+ "code_sha": "be4c0e368faf",
+ "code_sha_at_write": "be4c0e368faf",
+ "code_changed_during_run": false,
+ "git": "ac68af9",
+ "impl": "rev_minor.py",
+ "argv": "rev_minor.py rules",
+ "env": {
+  "RBRL_RESULTS": "/opt/rbrl_p12/results"
+ },
+ "inputs": {
+  "riyadh.epw": "a2e88409591c158f",
+  "jeddah.epw": "690cae887558f09e",
+  "taif.epw": "dc35449564eea0ae"
+ },
+ "python": "3.13.18",
+ "numpy": "2.5.3",
+ "host": "vm",
+ "pid": 995,
+ "utc": "2026-11-22T12:46:53Z"
+}
