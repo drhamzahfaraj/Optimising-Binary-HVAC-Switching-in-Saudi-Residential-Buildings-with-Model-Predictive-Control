@@ -43,7 +43,7 @@ def tag_code_sha(tag):
     return h.hexdigest()[:12]
 
 
-GATE_TAGS = "p6,p9,p10,p11,p13,p16,p19,p20,p21,p22,p23,p24"   # the round-4 lineage of record + minor revision
+GATE_TAGS = "p6,p9,p10,p11,p13,p16,p19,p20,p21,p22,p23,p24,p26,p27"   # the round-4 lineage of record + minor revision
 
 
 def record_sha():

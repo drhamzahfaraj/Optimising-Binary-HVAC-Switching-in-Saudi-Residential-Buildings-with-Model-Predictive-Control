@@ -169,10 +169,69 @@ def report():
             print(out)
 
 
+
+def sweep(tag, city, c, tariff="inforce", db=1.0):
+    rs = [r for r in rd("T40_derived_sweep" + tag) if r["city"] == city and abs(float(r["c_sw"]) - c) < 1e-12
+          and r["tariff"] == tariff and abs(float(r["deadband"]) - db) < 1e-12]
+    assert len(rs) == 1, (tag, city, c, tariff, db, len(rs))
+    return rs[0]
+
+
+def rep(arm, city, c):
+    rs = [r for r in rd("T41_ppo_repriced") if r["arm"] == arm and r["city"] == city and r["seed"] == "all"
+          and abs(float(r["c_sw"]) - c) < 1e-12]
+    return rs[0] if rs else None
+
+
+def _sv(r):
+    v = float(r["s_pooled_eq"])
+    t = f"{v:.1f}"
+    return "$" + ("0.0" if float(t) == 0 else t) + "$"
+
+
+def _rng(r):
+    if r is None:
+        return "---"
+    lo, hi = float(r["s_min"]), float(r["s_max"])
+    a, b = f"{lo:.1f}", f"{hi:.1f}"
+    return f"${a}$" if a == b else f"${a}$--${b}$"
+
+
+def tab_s_sweeps():
+    L = [r"\begin{table}[!ht]", r"\centering",
+         r"\caption{The tuned thermostat and the learned and shielded arms at the derived charges, $\csw=0.025$ and "
+         r"$0.114\,\SAR$: pooled equalised saving $s$ (\%) on the held-out windows. (a) TUNED refitted by Rule~A at each "
+         r"charge in each scenario of main Tables~8 and~9, one setting changed at a time from the headline case "
+         r"(tariff in force, THERM deadband $1\,^\circ$C, $\Cth=4{,}800\,$kJ/K, $\Delta t=15\,$min). (b) The PPO policies, "
+         r"their ceilings and the shield margins are those trained and fitted at $0.15\,\SAR$; their held-out "
+         r"trajectories are re-priced at each charge, which is exact for a fixed trajectory (TUNED re-priced in this way "
+         r"reproduces its refits). Seeded arms: range over the five seeds; PPO without rules has one admissible seed, "
+         r"in Riyadh.}",
+         r"\label{tab:s-sweeps}", r"\scriptsize", r"\setlength{\tabcolsep}{4pt}",
+         r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}", r"\toprule",
+         r" & \multicolumn{2}{c}{Riyadh} & \multicolumn{2}{c}{Jeddah} & \multicolumn{2}{c}{Taif} \\",
+         r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}",
+         r"$\csw$ ($\SAR$) & $0.025$ & $0.114$ & $0.025$ & $0.114$ & $0.025$ & $0.114$ \\", r"\midrule",
+         r"\multicolumn{7}{@{}l}{\emph{(a) TUNED, refitted}}\\"]
+    scen = [("Headline case", "", "inforce", 1.0), ("Tariff $0.21\\,\\SAR$/kWh (2027)", "", "y2027", 1.0),
+            ("THERM deadband $0.50\\,^\\circ$C", "", "inforce", 0.50), ("THERM deadband $0.75\\,^\\circ$C", "", "inforce", 0.75),
+            ("THERM deadband $1.25\\,^\\circ$C", "", "inforce", 1.25), ("$\\Cth=2{,}400\\,$kJ/K", "_cth2400", "inforce", 1.0),
+            ("$\\Cth=7{,}200\\,$kJ/K", "_cth7200", "inforce", 1.0), ("$\\Cth=9{,}600\\,$kJ/K", "_cth9600", "inforce", 1.0),
+            ("$\\Delta t=5\\,$min", "_dt5", "inforce", 1.0), ("$\\Delta t=30\\,$min", "_dt30", "inforce", 1.0)]
+    for lab, tag, tar, db in scen:
+        L.append(lab + " & " + " & ".join(_sv(sweep(tag, ci, c, tar, db)) for ci in CITIES for c in DER) + r" \\")
+    L.append(r"\midrule")
+    L.append(r"\multicolumn{7}{@{}l}{\emph{(b) Learned and shielded arms, re-priced}}\\")
+    for lab, arm in (("Guard hysteresis", "guard"), ("RBRL, 5 seeds", "RBRL"), ("D1 shield on latch", "D1_latch"),
+                     ("D1 on PPO, 5 seeds", "D1_ppo"), ("PPO without rules", "NORULES")):
+        L.append(lab + " & " + " & ".join(_rng(rep(arm, ci, c)) for ci in CITIES for c in DER) + r" \\")
+    L += [r"\bottomrule", r"\end{tabular*}", r"\end{table}"]
+    return "\n".join(L) + "\n"
+
 if __name__ == "__main__":
     report()
     if "--write" in sys.argv:
         os.makedirs(OUT, exist_ok=True)
-        for fn, f in (("tab_derived.tex", tab_derived), ("tab_s_derived.tex", tab_s_derived)):
+        for fn, f in (("tab_derived.tex", tab_derived), ("tab_s_derived.tex", tab_s_derived), ("tab_s_sweeps.tex", tab_s_sweeps)):
             open(os.path.join(OUT, fn), "w").write(f())
             print("wrote", fn)

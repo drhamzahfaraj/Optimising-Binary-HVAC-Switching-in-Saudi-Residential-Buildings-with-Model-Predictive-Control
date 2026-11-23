@@ -370,4 +370,41 @@ Per-window, $0.15$ & F2 & Riyadh & $+8.9$ [$+6.7$, $+10.4$] & 7/0 & $0.031$ & $+
 \end{tabularx}
 \end{table}
 
+Table~\ref{tab:s-sweeps} carries the rest of the analysis to the derived charges: the tuned thermostat refitted in every scenario of main Tables~8 and~9, and the learned and shielded arms, whose policies were trained at $0.15\,\SAR$, re-priced on their held-out trajectories.
+
+\begin{table}[!ht]
+\centering
+\caption{The tuned thermostat and the learned and shielded arms at the derived charges, $\csw=0.025$ and $0.114\,\SAR$: pooled equalised saving $s$ (\%) on the held-out windows. (a) TUNED refitted by Rule~A at each charge in each scenario of main Tables~8 and~9, one setting changed at a time from the headline case (tariff in force, THERM deadband $1\,^\circ$C, $\Cth=4{,}800\,$kJ/K, $\Delta t=15\,$min). (b) The PPO policies, their ceilings and the shield margins are those trained and fitted at $0.15\,\SAR$; their held-out trajectories are re-priced at each charge, which is exact for a fixed trajectory (TUNED re-priced in this way reproduces its refits). Seeded arms: range over the five seeds; PPO without rules has one admissible seed, in Riyadh.}
+\label{tab:s-sweeps}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
+\toprule
+ & \multicolumn{2}{c}{Riyadh} & \multicolumn{2}{c}{Jeddah} & \multicolumn{2}{c}{Taif} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+$\csw$ ($\SAR$) & $0.025$ & $0.114$ & $0.025$ & $0.114$ & $0.025$ & $0.114$ \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{(a) TUNED, refitted}}\\
+Headline case & $3.8$ & $11.0$ & $4.3$ & $12.0$ & $3.9$ & $10.9$ \\
+Tariff $0.21\,\SAR$/kWh (2027) & $3.4$ & $10.1$ & $3.8$ & $11.0$ & $3.5$ & $10.1$ \\
+THERM deadband $0.50\,^\circ$C & $15.7$ & $36.6$ & $17.1$ & $38.8$ & $16.8$ & $37.7$ \\
+THERM deadband $0.75\,^\circ$C & $7.9$ & $20.8$ & $8.2$ & $21.2$ & $8.0$ & $20.5$ \\
+THERM deadband $1.25\,^\circ$C & $1.6$ & $5.0$ & $1.8$ & $5.4$ & $0.4$ & $1.2$ \\
+$\Cth=2{,}400\,$kJ/K & $-1.1$ & $-2.5$ & $-0.6$ & $-1.3$ & $-0.5$ & $-1.1$ \\
+$\Cth=7{,}200\,$kJ/K & $4.3$ & $13.7$ & $4.6$ & $14.3$ & $4.9$ & $15.2$ \\
+$\Cth=9{,}600\,$kJ/K & $3.9$ & $13.3$ & $4.0$ & $13.4$ & $4.1$ & $13.6$ \\
+$\Delta t=5\,$min & $8.1$ & $22.0$ & $8.1$ & $21.9$ & $8.5$ & $22.8$ \\
+$\Delta t=30\,$min & $-0.4$ & $-1.1$ & $-0.5$ & $-1.3$ & $-0.4$ & $-1.0$ \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{(b) Learned and shielded arms, re-priced}}\\
+Guard hysteresis & $1.8$ & $5.0$ & $2.4$ & $6.7$ & $3.5$ & $9.7$ \\
+RBRL, 5 seeds & $1.8$ & $5.0$ & $2.4$ & $6.7$ & $2.7$--$3.5$ & $7.6$--$9.7$ \\
+D1 shield on latch & $4.3$ & $12.2$ & $4.2$ & $11.8$ & $3.9$ & $10.9$ \\
+D1 on PPO, 5 seeds & $3.9$--$4.3$ & $11.2$--$12.3$ & $3.5$--$4.2$ & $9.9$--$11.8$ & $2.5$--$3.8$ & $7.1$--$10.5$ \\
+PPO without rules & $-1.1$ & $-3.1$ & --- & --- & --- & --- \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+
 \end{document}

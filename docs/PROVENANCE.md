@@ -107,7 +107,7 @@ the `code/results → ../results` link and the original-path link).
 
 ## 3. Check result
 
-`python3 docs/provenance_check.py` on this release: **EXTERNAL, CITED** 4, **NOT IN A RESULT FILE** 2, **OK** 1131, **n/a** 2 of 1139 mapped values.
+`python3 docs/provenance_check.py` on this release: **EXTERNAL, CITED** 4, **NOT IN A RESULT FILE** 2, **OK** 1222, **n/a** 2 of 1230 mapped values.
 
 Values that are not a plain match (pending, not in a result file, cross-references, or mismatches):
 
@@ -1316,6 +1316,112 @@ Values that are not a plain match (pending, not in a result file, cross-referenc
 |---|---|---|---|---|
 | sota text: at 0.15 TUNED, MPC-24 and the bracket (12.5, 18.3, 18.0--20.0) *(stated in: State-of-the-Art Comparison)* | 12.5 -- 18.3 -- 18.0 -- 20.0 | `T1v3_heldout / T21v3_riyadh / T17v3_riyadh` | values at the 0.15 SAR sensitivity case | OK |
 
+### S10 tab:s-sweeps
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| TUNED headline, Riyadh, c_sw 0.025 | 3.8 | `T40_derived_sweep [riyadh, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED headline, Riyadh, c_sw 0.114 | 11.0 | `T40_derived_sweep [riyadh, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED headline, Jeddah, c_sw 0.025 | 4.3 | `T40_derived_sweep [jeddah, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED headline, Jeddah, c_sw 0.114 | 12.0 | `T40_derived_sweep [jeddah, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED headline, Taif, c_sw 0.025 | 3.9 | `T40_derived_sweep [taif, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED headline, Taif, c_sw 0.114 | 10.9 | `T40_derived_sweep [taif, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED tariff 2027, Riyadh, c_sw 0.025 | 3.4 | `T40_derived_sweep [riyadh, 0.025, y2027, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED tariff 2027, Riyadh, c_sw 0.114 | 10.1 | `T40_derived_sweep [riyadh, 0.114, y2027, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED tariff 2027, Jeddah, c_sw 0.025 | 3.8 | `T40_derived_sweep [jeddah, 0.025, y2027, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED tariff 2027, Jeddah, c_sw 0.114 | 11.0 | `T40_derived_sweep [jeddah, 0.114, y2027, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED tariff 2027, Taif, c_sw 0.025 | 3.5 | `T40_derived_sweep [taif, 0.025, y2027, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED tariff 2027, Taif, c_sw 0.114 | 10.1 | `T40_derived_sweep [taif, 0.114, y2027, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.50, Riyadh, c_sw 0.025 | 15.7 | `T40_derived_sweep [riyadh, 0.025, inforce, db 0.5] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.50, Riyadh, c_sw 0.114 | 36.6 | `T40_derived_sweep [riyadh, 0.114, inforce, db 0.5] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.50, Jeddah, c_sw 0.025 | 17.1 | `T40_derived_sweep [jeddah, 0.025, inforce, db 0.5] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.50, Jeddah, c_sw 0.114 | 38.8 | `T40_derived_sweep [jeddah, 0.114, inforce, db 0.5] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.50, Taif, c_sw 0.025 | 16.8 | `T40_derived_sweep [taif, 0.025, inforce, db 0.5] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.50, Taif, c_sw 0.114 | 37.7 | `T40_derived_sweep [taif, 0.114, inforce, db 0.5] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.75, Riyadh, c_sw 0.025 | 7.9 | `T40_derived_sweep [riyadh, 0.025, inforce, db 0.75] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.75, Riyadh, c_sw 0.114 | 20.8 | `T40_derived_sweep [riyadh, 0.114, inforce, db 0.75] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.75, Jeddah, c_sw 0.025 | 8.2 | `T40_derived_sweep [jeddah, 0.025, inforce, db 0.75] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.75, Jeddah, c_sw 0.114 | 21.2 | `T40_derived_sweep [jeddah, 0.114, inforce, db 0.75] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.75, Taif, c_sw 0.025 | 8.0 | `T40_derived_sweep [taif, 0.025, inforce, db 0.75] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 0.75, Taif, c_sw 0.114 | 20.5 | `T40_derived_sweep [taif, 0.114, inforce, db 0.75] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 1.25, Riyadh, c_sw 0.025 | 1.6 | `T40_derived_sweep [riyadh, 0.025, inforce, db 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 1.25, Riyadh, c_sw 0.114 | 5.0 | `T40_derived_sweep [riyadh, 0.114, inforce, db 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 1.25, Jeddah, c_sw 0.025 | 1.8 | `T40_derived_sweep [jeddah, 0.025, inforce, db 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 1.25, Jeddah, c_sw 0.114 | 5.4 | `T40_derived_sweep [jeddah, 0.114, inforce, db 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 1.25, Taif, c_sw 0.025 | 0.4 | `T40_derived_sweep [taif, 0.025, inforce, db 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED deadband 1.25, Taif, c_sw 0.114 | 1.2 | `T40_derived_sweep [taif, 0.114, inforce, db 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 2400, Riyadh, c_sw 0.025 | -1.1 | `T40_derived_sweep_cth2400 [riyadh, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 2400, Riyadh, c_sw 0.114 | -2.5 | `T40_derived_sweep_cth2400 [riyadh, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 2400, Jeddah, c_sw 0.025 | -0.6 | `T40_derived_sweep_cth2400 [jeddah, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 2400, Jeddah, c_sw 0.114 | -1.3 | `T40_derived_sweep_cth2400 [jeddah, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 2400, Taif, c_sw 0.025 | -0.5 | `T40_derived_sweep_cth2400 [taif, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 2400, Taif, c_sw 0.114 | -1.1 | `T40_derived_sweep_cth2400 [taif, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 7200, Riyadh, c_sw 0.025 | 4.3 | `T40_derived_sweep_cth7200 [riyadh, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 7200, Riyadh, c_sw 0.114 | 13.7 | `T40_derived_sweep_cth7200 [riyadh, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 7200, Jeddah, c_sw 0.025 | 4.6 | `T40_derived_sweep_cth7200 [jeddah, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 7200, Jeddah, c_sw 0.114 | 14.3 | `T40_derived_sweep_cth7200 [jeddah, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 7200, Taif, c_sw 0.025 | 4.9 | `T40_derived_sweep_cth7200 [taif, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 7200, Taif, c_sw 0.114 | 15.2 | `T40_derived_sweep_cth7200 [taif, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 9600, Riyadh, c_sw 0.025 | 3.9 | `T40_derived_sweep_cth9600 [riyadh, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 9600, Riyadh, c_sw 0.114 | 13.3 | `T40_derived_sweep_cth9600 [riyadh, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 9600, Jeddah, c_sw 0.025 | 4.0 | `T40_derived_sweep_cth9600 [jeddah, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 9600, Jeddah, c_sw 0.114 | 13.4 | `T40_derived_sweep_cth9600 [jeddah, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 9600, Taif, c_sw 0.025 | 4.1 | `T40_derived_sweep_cth9600 [taif, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED C_th 9600, Taif, c_sw 0.114 | 13.6 | `T40_derived_sweep_cth9600 [taif, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 5 min, Riyadh, c_sw 0.025 | 8.1 | `T40_derived_sweep_dt5 [riyadh, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 5 min, Riyadh, c_sw 0.114 | 22.0 | `T40_derived_sweep_dt5 [riyadh, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 5 min, Jeddah, c_sw 0.025 | 8.1 | `T40_derived_sweep_dt5 [jeddah, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 5 min, Jeddah, c_sw 0.114 | 21.9 | `T40_derived_sweep_dt5 [jeddah, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 5 min, Taif, c_sw 0.025 | 8.5 | `T40_derived_sweep_dt5 [taif, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 5 min, Taif, c_sw 0.114 | 22.8 | `T40_derived_sweep_dt5 [taif, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 30 min, Riyadh, c_sw 0.025 | -0.4 | `T40_derived_sweep_dt30 [riyadh, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 30 min, Riyadh, c_sw 0.114 | -1.1 | `T40_derived_sweep_dt30 [riyadh, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 30 min, Jeddah, c_sw 0.025 | -0.5 | `T40_derived_sweep_dt30 [jeddah, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 30 min, Jeddah, c_sw 0.114 | -1.3 | `T40_derived_sweep_dt30 [jeddah, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 30 min, Taif, c_sw 0.025 | -0.4 | `T40_derived_sweep_dt30 [taif, 0.025, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| TUNED dt 30 min, Taif, c_sw 0.114 | -1.0 | `T40_derived_sweep_dt30 [taif, 0.114, inforce, db 1] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| re-priced guard, Riyadh, c_sw 0.025 (min, max over seeds) | 1.8 | `T41_ppo_repriced [guard, riyadh, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced guard, Riyadh, c_sw 0.114 (min, max over seeds) | 5.0 | `T41_ppo_repriced [guard, riyadh, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced guard, Jeddah, c_sw 0.025 (min, max over seeds) | 2.4 | `T41_ppo_repriced [guard, jeddah, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced guard, Jeddah, c_sw 0.114 (min, max over seeds) | 6.7 | `T41_ppo_repriced [guard, jeddah, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced guard, Taif, c_sw 0.025 (min, max over seeds) | 3.5 | `T41_ppo_repriced [guard, taif, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced guard, Taif, c_sw 0.114 (min, max over seeds) | 9.7 | `T41_ppo_repriced [guard, taif, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced RBRL, Riyadh, c_sw 0.025 (min, max over seeds) | 1.8 | `T41_ppo_repriced [RBRL, riyadh, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced RBRL, Riyadh, c_sw 0.114 (min, max over seeds) | 5.0 | `T41_ppo_repriced [RBRL, riyadh, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced RBRL, Jeddah, c_sw 0.025 (min, max over seeds) | 2.4 | `T41_ppo_repriced [RBRL, jeddah, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced RBRL, Jeddah, c_sw 0.114 (min, max over seeds) | 6.7 | `T41_ppo_repriced [RBRL, jeddah, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced RBRL, Taif, c_sw 0.025 (min, max over seeds) | 2.7 -- 3.5 | `T41_ppo_repriced [RBRL, taif, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced RBRL, Taif, c_sw 0.114 (min, max over seeds) | 7.6 -- 9.7 | `T41_ppo_repriced [RBRL, taif, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 latch, Riyadh, c_sw 0.025 (min, max over seeds) | 4.3 | `T41_ppo_repriced [D1_latch, riyadh, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 latch, Riyadh, c_sw 0.114 (min, max over seeds) | 12.2 | `T41_ppo_repriced [D1_latch, riyadh, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 latch, Jeddah, c_sw 0.025 (min, max over seeds) | 4.2 | `T41_ppo_repriced [D1_latch, jeddah, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 latch, Jeddah, c_sw 0.114 (min, max over seeds) | 11.8 | `T41_ppo_repriced [D1_latch, jeddah, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 latch, Taif, c_sw 0.025 (min, max over seeds) | 3.9 | `T41_ppo_repriced [D1_latch, taif, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 latch, Taif, c_sw 0.114 (min, max over seeds) | 10.9 | `T41_ppo_repriced [D1_latch, taif, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 on PPO, Riyadh, c_sw 0.025 (min, max over seeds) | 3.9 -- 4.3 | `T41_ppo_repriced [D1_ppo, riyadh, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 on PPO, Riyadh, c_sw 0.114 (min, max over seeds) | 11.2 -- 12.3 | `T41_ppo_repriced [D1_ppo, riyadh, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 on PPO, Jeddah, c_sw 0.025 (min, max over seeds) | 3.5 -- 4.2 | `T41_ppo_repriced [D1_ppo, jeddah, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 on PPO, Jeddah, c_sw 0.114 (min, max over seeds) | 9.9 -- 11.8 | `T41_ppo_repriced [D1_ppo, jeddah, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 on PPO, Taif, c_sw 0.025 (min, max over seeds) | 2.5 -- 3.8 | `T41_ppo_repriced [D1_ppo, taif, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced D1 on PPO, Taif, c_sw 0.114 (min, max over seeds) | 7.1 -- 10.5 | `T41_ppo_repriced [D1_ppo, taif, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced PPO without rules, Riyadh, c_sw 0.025 (min, max over seeds) | -1.1 | `T41_ppo_repriced [NORULES, riyadh, 0.025] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+| re-priced PPO without rules, Riyadh, c_sw 0.114 (min, max over seeds) | -3.1 | `T41_ppo_repriced [NORULES, riyadh, 0.114] s_min, s_max` | re-priced pooled equalised saving, range over seeds | OK |
+
+### main §9.2 component ablation
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| derived sweeps: Riyadh TUNED across capacities at 0.025 and 0.114 *(stated in: Where the MPC Margin Comes From)* | -1.1 -- 3.8 -- 4.3 -- 3.9 -- -2.5 -- 11.0 -- 13.7 -- 13.3 | `T40_derived_sweep{_cth2400,,_cth7200,_cth9600} [riyadh] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| derived sweeps: comparator deadband 0.5 and 1.25 C in Riyadh (15.7, 1.6; 36.6, 5.0) *(stated in: Component Ablation and Sensitivity)* | 15.7 -- 1.6 -- 36.6 -- 5.0 | `T40_derived_sweep [riyadh, deadband 0.5 / 1.25] s_pooled_eq` | s = 100 (1 - sum_w J_arm / sum_w J_THERM(delta_w)) over the 7 held-out windows (Rule C) | OK |
+| derived sweeps: RBRL re-priced equals the guard (Riyadh, Jeddah) and Taif range *(stated in: Component Ablation and Sensitivity)* | 1.8 -- 2.4 -- 5.0 -- 6.7 -- 2.7 -- 3.5 -- 7.6 -- 9.7 | `T41_ppo_repriced [RBRL, guard]` | re-priced pooled equalised saving | OK |
+| derived sweeps: guard re-priced in Taif (3.5, 9.7) *(stated in: Component Ablation and Sensitivity)* | 3.5 -- 9.7 | `T41_ppo_repriced [guard, taif]` | re-priced pooled equalised saving | OK |
+
+### main §9.3 actuation step
+
+| Item | Printed | Source: file [row filter] column | How it is computed | Check |
+|---|---|---|---|---|
+| derived sweeps: TUNED at 5 min (8.1--8.5, 21.9--22.8) and 30 min (-0.5..-0.4, -1.3..-1.0) *(stated in: Actuation Step)* | 8.1 -- 8.5 -- 21.9 -- 22.8 -- -0.5 -- -0.4 -- -1.3 -- -1.0 | `T40_derived_sweep_dt5 / _dt30 s_pooled_eq` | min..max over cities | OK |
+
 ### abstract + conclusions
 
 | Item | Printed | Source: file [row filter] column | How it is computed | Check |
@@ -1656,6 +1762,13 @@ Every file cited above, with the stamp in its `.meta.json` (code sha → tag of 
 | `T21v3_pers_csw0.114_taif_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --city taif --horizons 24 --forecast persistence --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `34d014b49635` → p22 (7bae2aa) | 2026-11-22T12:41:21Z | docs/jobs/p23_minor.jsonl:P22_mpcp24_csw0.114_taif |
 | `T21v3_csw0.114_pwadm_jeddah.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --horizons 24 --admission per_window --city jeddah --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `be4c0e368faf` → p23 (minor revision: rev_minor, mpc_lambda --admission) | 2026-11-22T14:21:09Z | docs/jobs/p23_minor.jsonl:P23_pw_T21v3_csw0.114_jeddah |
 | `T21v3_csw0.114_pwadm_jeddah_perwindow.csv` | `mpc_lambda.py`: main -> fit_lambda() (Rule A) -> t1_v2.evaluate() | `mpc_lambda.py --horizons 24 --admission per_window --city jeddah --csw 0.114` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `be4c0e368faf` → p23 (minor revision: rev_minor, mpc_lambda --admission) | 2026-11-22T14:21:09Z | docs/jobs/p23_minor.jsonl:P23_pw_T21v3_csw0.114_jeddah |
+| `T40_derived_sweep.csv` | `rev_minor.py`:  | `rev_minor.py sweep` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results", "RBRL_TAG": ""}` | `1555d4e0b72e` → p27 (minor revision: rev_minor reprice, sweep) | 2026-11-23T14:44:15Z | docs/jobs/p23_minor.jsonl:P27_sweep |
+| `T40_derived_sweep_cth2400.csv` | `rev_minor.py`:  | `rev_minor.py sweep` | `{"RBRL_CTH": "2400", "RBRL_RESULTS": "/opt/rbrl_p12/results", "RBRL_TAG": "_cth2400"}` | `1555d4e0b72e` → p27 (minor revision: rev_minor reprice, sweep) | 2026-11-23T14:43:48Z | docs/jobs/p23_minor.jsonl:P27_sweep_cth2400 |
+| `T40_derived_sweep_cth7200.csv` | `rev_minor.py`:  | `rev_minor.py sweep` | `{"RBRL_CTH": "7200", "RBRL_RESULTS": "/opt/rbrl_p12/results", "RBRL_TAG": "_cth7200"}` | `1555d4e0b72e` → p27 (minor revision: rev_minor reprice, sweep) | 2026-11-23T14:43:55Z | docs/jobs/p23_minor.jsonl:P27_sweep_cth7200 |
+| `T40_derived_sweep_cth9600.csv` | `rev_minor.py`:  | `rev_minor.py sweep` | `{"RBRL_CTH": "9600", "RBRL_RESULTS": "/opt/rbrl_p12/results", "RBRL_TAG": "_cth9600"}` | `1555d4e0b72e` → p27 (minor revision: rev_minor reprice, sweep) | 2026-11-23T14:44:03Z | docs/jobs/p23_minor.jsonl:P27_sweep_cth9600 |
+| `T40_derived_sweep_dt5.csv` | `rev_minor.py`:  | `rev_minor.py sweep` | `{"RBRL_DT_MIN": "5", "RBRL_RESULTS": "/opt/rbrl_p12/results", "RBRL_TAG": "_dt5"}` | `1555d4e0b72e` → p27 (minor revision: rev_minor reprice, sweep) | 2026-11-23T14:44:20Z | docs/jobs/p23_minor.jsonl:P27_sweep_dt5 |
+| `T40_derived_sweep_dt30.csv` | `rev_minor.py`:  | `rev_minor.py sweep` | `{"RBRL_DT_MIN": "30", "RBRL_RESULTS": "/opt/rbrl_p12/results", "RBRL_TAG": "_dt30"}` | `1555d4e0b72e` → p27 (minor revision: rev_minor reprice, sweep) | 2026-11-23T14:44:23Z | docs/jobs/p23_minor.jsonl:P27_sweep_dt30 |
+| `T41_ppo_repriced.csv` | `rev_minor.py`:  | `rev_minor.py reprice` | `{"RBRL_RESULTS": "/opt/rbrl_p12/results"}` | `1555d4e0b72e` → p27 (minor revision: rev_minor reprice, sweep) | 2026-11-23T14:43:34Z | docs/jobs/p23_minor.jsonl:P27_reprice |
 | `T32_setpoint_sens.csv` | `setpoint_sens.py`: main() (THERM shifted on its own Rule C curve) | `setpoint_sens.py` | `{}` | `30ec35b0a020` → p21 (30604b9) | 2026-11-13T17:37:32Z | docs/jobs/p12_p12.jsonl:P13_setpoint |
 | `T33_ppo_hold_gap.csv` | `ppo_hold_gap.py`: main() (saved PPO models vs hold, training cost) | `ppo_hold_gap.py` | `{}` | `5e8bc69a807c` → p20 (f430287) | 2026-11-13T14:25:34Z | docs/jobs/p12_p12.jsonl:P16_hold_gap |
 | `T34_greenriyadh_sens.csv` | `greenriyadh_sens.py`: main() (outdoor dry-bulb shifted, thresholds fixed) | `greenriyadh_sens.py` | `{}` | `30ec35b0a020` → p21 (30604b9) | 2026-11-13T17:37:29Z | docs/jobs/p12_p12.jsonl:P19_greenriyadh |

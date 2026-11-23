@@ -216,3 +216,6 @@ T21v3_pers_csw0.025_*.csv
 T21v3_pers_csw0.114_*.csv
 T21v3_pwadm_*.csv
 T21v3_pers_pwadm_*.csv
+# Minor revision, second part: TUNED sensitivity scenarios and re-priced learned arms at the derived charges
+T40_derived_sweep*.csv
+T41_ppo_repriced.csv

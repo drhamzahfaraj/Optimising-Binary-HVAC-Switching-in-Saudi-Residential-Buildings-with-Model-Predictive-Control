@@ -52,7 +52,7 @@ and the assumed 1 °C comparator; the paper reports how each moves the result.
 
 | Path | Contents |
 |---|---|
-| `code/` | The code of record: `code/` is tag p25 (commit `f25c8a7`, code sha `4361168f19b8`, the algorithm of `rbrl_io.code_sha_now`), with comments tidied and the default working directory set to `/opt/rbrl` (only comments, docstrings, message texts and that path differ; code sha of this copy `ad053db6d325`); result files are stamped by the lineage p6–p24 listed in `docs/PROVENANCE.md`. Includes `tests/`, `jobs/` (job lists for `jobq2.py`), `rbrl_io.py`, `jobq2.py`, `invariants.py`, every producer, and `amy/` (ERA5 actual-year weather, redistributable). The TMYx `.epw` files are **not** included. |
+| `code/` | The code of record: `code/` is tag p28 (commit `c49a611`, code sha `b53dc9dbab84`, the algorithm of `rbrl_io.code_sha_now`), with comments tidied and the default working directory set to `/opt/rbrl` (only comments, docstrings, message texts and that path differ; code sha of this copy `a26f81809e47`); result files are stamped by the lineage p6–p27 listed in `docs/PROVENANCE.md`. Includes `tests/`, `jobs/` (job lists for `jobq2.py`), `rbrl_io.py`, `jobq2.py`, `invariants.py`, every producer, and `amy/` (ERA5 actual-year weather, redistributable). The TMYx `.epw` files are **not** included. |
 | `results/` | Final result files of the round-4 reruns: every CSV and JSON with its `.meta.json` provenance record, the gate log `gate_p12.log`, and `archive_r3/` (round-3 files kept for the record). |
 | `paper/` | `main.tex` (Elsevier layout), `main_sn.tex` (Springer Nature layout), `supplement.tex`, `references.bib`, `tables/`, the figure sources the manuscript inputs (`fig_leap.tex`, and the result figures `fig_traces.tex`, `fig_timestep.tex` and `fig_ladder.tex` with their generator `make_result_figs.py`), `to_springer.py` (main.tex → main_sn.tex) and `make_blind.py` (anonymised review copies; their output is not published), the class/style files, and the PDFs `main.pdf`, `main_sn.pdf`, `supplement.pdf`. `paper/repository-figures/` holds the figures the manuscript places "in the repository": the guard-band diagram (`fig_guards.tex`), the admissibility sweeps (`fig_admiss.tex`), the SLHA automaton state diagram (`fig_slha_withdrawn.tex`) and the monthly and diurnal climate profiles (`fig_climate_withdrawn.tex`; "withdrawn" = moved out of the paper body), and the tariff figure no longer printed (`fig_tariff.tex`). |
 | `docs/` | `PROVENANCE.md` (value-by-value map), `METHODS_NOTES.md` (column definitions), `invariant-suite.md` (the nine gate classes and what each checks), `MOVED_FROM_MANUSCRIPT.md` (passages moved from the paper to these docs), `provenance_check.py` (rebuilds and checks the map), `jobs/` (job lists of earlier stages). |
@@ -214,17 +214,18 @@ p20 (`5e8bc69a807c`: `T35_day_traces`, `T33_ppo_hold_gap` and the gate run), p21
 (`34d014b49635`: `T36_decision_time` and the ten `T37_therm_leak_*` files). The minor revision
 adds p22 runs of the `24` h MPC at the derived charges (`T21v3_csw*`, `T21v3_pers_csw*`), p23
 (`be4c0e368faf`: `rev_minor.py` and `mpc_lambda.py --admission per_window`; `T38_derived_rules`
-and the `*_pwadm_*` files) and p24 (`cb8c62f21553`: `T39_derived_stats`); p25 extends the
+and the `*_pwadm_*` files) and p24 (`cb8c62f21553`: `T39_derived_stats`), then p26 and p27 (`1555d4e0b72e`:
+`T40_derived_sweep*`, `T41_ppo_repriced` and the invariant gate record); p25 and p28 extend the
 lineage list and the cited manifest only. The tag lineage p6, p9, p10, p11, p13, p16, p19, p20,
-p21, p22, p23, p24 (`build_registry.GATE_TAGS`) is the code of record of the results; p13, p16 and p19 stamped files that were later rerun. `build_registry.py` and `tests/test_gate_provenance.py` accept a
+p21, p22, p23, p24, p26, p27 (`build_registry.GATE_TAGS`) is the code of record of the results; p13, p16 and p19 stamped files that were later rerun. `build_registry.py` and `tests/test_gate_provenance.py` accept a
 cited file only if every row and its `.meta.json` carry exactly one of these shas and the code
-did not change during the run; `VALUES_REGISTRY.md` reports **217 cited files CURRENT and 1
+did not change during the run; `VALUES_REGISTRY.md` reports **224 cited files CURRENT and 1
 FROZEN** (`T4_tariff.csv`, read only by the unprinted tariff figure). p14, p15, p17 and p18
 change only tests, the gate logic, the lineage list and a label in `build_registry.py`, and
 produce no results. The registry and the provenance gate need the tags, i.e. a clone of the
-working repository. The archived `code/` is p25 with comments tidied and the default working
+working repository. The archived `code/` is p28 with comments tidied and the default working
 directory set to `/opt/rbrl`; only comments, docstrings, message texts and that path differ, so its code sha changes
-(`ad053db6d325` instead of p25's `4361168f19b8`), and the results keep the stamps of the tags
+(`a26f81809e47` instead of p28's `b53dc9dbab84`), and the results keep the stamps of the tags
 that produced them.
 
 ## Weather data and licences
@@ -268,8 +269,10 @@ the bound) were refitted and tested at 0.025 and 0.114 SAR per on-command, the c
 estimate supports, which are now the primary instance (`T38_derived_rules`, `T21v3_csw*`,
 `T21v3_pers_csw*`, `T39_derived_stats`); 0.15 SAR is kept as a sensitivity case. The 24 h MPC was
 also refitted under the per-window comfort-matching criterion (`mpc_lambda.py --admission
-per_window`, files `*_pwadm_*`). Jobs: [`docs/jobs/p23_minor.jsonl`](docs/jobs/p23_minor.jsonl);
-the two new tables are generated by `paper/make_rev_tables.py`.
+per_window`, files `*_pwadm_*`). The tuned thermostat's sensitivity scenarios were refitted at
+the derived charges (`T40_derived_sweep*`), and the learned and shielded arms re-priced there on
+their held-out trajectories (`T41_ppo_repriced`). Jobs: [`docs/jobs/p23_minor.jsonl`](docs/jobs/p23_minor.jsonl);
+the three new tables are generated by `paper/make_rev_tables.py`.
 
 ## Citation
 

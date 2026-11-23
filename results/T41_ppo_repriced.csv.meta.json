@@ -1,0 +1,36 @@
+{
+ "code_sha": "1555d4e0b72e",
+ "code_sha_at_write": "1555d4e0b72e",
+ "code_changed_during_run": false,
+ "git": "9886e8e",
+ "impl": "rev_minor.py",
+ "argv": "rev_minor.py reprice",
+ "env": {
+  "RBRL_RESULTS": "/opt/rbrl_p12/results"
+ },
+ "inputs": {
+  "../rbrl_p12/results/T1v3_perwindow.csv": "27e00f4d857b8569",
+  "../rbrl_p12/results/rbrl_ppo5_v3_riyadh_perwindow.csv": "b3e4c6ecdd3eeb3d",
+  "../rbrl_p12/results/T_D1_latch_riyadh.csv": "7dc11b70af7e0e11",
+  "../rbrl_p12/results/T_D1_latch_riyadh_perwindow.csv": "6b465791a988870d",
+  "../rbrl_p12/results/T_D1_ppo_riyadh.csv": "56897c3a64bf67d6",
+  "../rbrl_p12/results/T_D1_ppo_riyadh_perwindow.csv": "d0a3ffb28f863c3b",
+  "../rbrl_p12/results/rbrl_norules5_v3_perwindow.csv": "6995833d2d2038f9",
+  "../rbrl_p12/results/rbrl_ppo5_v3_jeddah_perwindow.csv": "d25e4517c55b2510",
+  "../rbrl_p12/results/T_D1_latch_jeddah.csv": "3659971ad64dcb79",
+  "../rbrl_p12/results/T_D1_latch_jeddah_perwindow.csv": "ceda1dac697ccc0f",
+  "../rbrl_p12/results/T_D1_ppo_jeddah.csv": "bb7cc7a10a89315d",
+  "../rbrl_p12/results/T_D1_ppo_jeddah_perwindow.csv": "d737256e6ffd10f3",
+  "../rbrl_p12/results/rbrl_ppo5_v3_taif_perwindow.csv": "7cd7296e288ac68f",
+  "../rbrl_p12/results/T_D1_latch_taif.csv": "1f9920795ef16af9",
+  "../rbrl_p12/results/T_D1_latch_taif_perwindow.csv": "9cb30e3ceeb1e39c",
+  "../rbrl_p12/results/T_D1_ppo_taif.csv": "936eba8125bf5068",
+  "../rbrl_p12/results/T_D1_ppo_taif_perwindow.csv": "2e7c57219daa2abe",
+  "../rbrl_p12/results/T38_derived_rules.csv": "a9f99f91707b2862"
+ },
+ "python": "3.13.18",
+ "numpy": "2.5.3",
+ "host": "vm",
+ "pid": 342,
+ "utc": "2026-11-23T14:43:34Z"
+}

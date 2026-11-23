@@ -24,7 +24,7 @@ CN = {"riyadh": "Riyadh", "jeddah": "Jeddah", "taif": "Taif"}
 
 # code sha (rbrl_io.code_sha_now over code/*.py) of each tag of the private working repository;
 # results are stamped with the sha of the code that produced them. code/ in this release = p13.
-TAG_OF_SHA = {"cb8c62f21553": "p24 (minor revision: rev_minor stats)", "be4c0e368faf": "p23 (minor revision: rev_minor, mpc_lambda --admission)", "34d014b49635": "p22 (7bae2aa)", "30ec35b0a020": "p21 (30604b9)", "5e8bc69a807c": "p20 (f430287)", "c57127b9bfe3": "p19 (c7c3404)", "e2edc1977534": "p18 (1807829)", "e4d7eb184ea5": "p16 (3021d83)", "efbca8c69379": "p15 (d9d14a1)", "4456d5d606cb": "p13 (ad73590)", "0dfeff39fa25": "p12 (280f533)",
+TAG_OF_SHA = {"1555d4e0b72e": "p27 (minor revision: rev_minor reprice, sweep)", "af880197121e": "p26 (minor revision: rev_minor reprice, sweep)", "cb8c62f21553": "p24 (minor revision: rev_minor stats)", "be4c0e368faf": "p23 (minor revision: rev_minor, mpc_lambda --admission)", "34d014b49635": "p22 (7bae2aa)", "30ec35b0a020": "p21 (30604b9)", "5e8bc69a807c": "p20 (f430287)", "c57127b9bfe3": "p19 (c7c3404)", "e2edc1977534": "p18 (1807829)", "e4d7eb184ea5": "p16 (3021d83)", "efbca8c69379": "p15 (d9d14a1)", "4456d5d606cb": "p13 (ad73590)", "0dfeff39fa25": "p12 (280f533)",
               "f8fb2cd89384": "p11 (d9b327f)", "5ca2e0ff7e9d": "p10 (818f270)",
               "746846849b97": "p9 (9ce9142)", "b64c08d6b645": "p8 (d837b4a)",
               "ba2229db8d46": "p7 (989b324)", "5020e03ec6ca": "p6 (c5c2fdb)",
@@ -686,6 +686,60 @@ E(L, "sota text: at 0.15 TUNED, MPC-24 and the bracket (12.5, 18.3, 18.0--20.0)"
   lambda: (one("T1v3_heldout", "s_pooled_eq", city="riyadh", arm="TUNED", tariff="inforce"), one("T21v3_riyadh", "s_pooled_eq", horizon_h=24.0, forecast="perfect"),
            one("T17v3_riyadh", "clv_s_raw"), one("T17v3_riyadh", "bound_reported")))
 
+# ================================================================== minor revision, part 2: sweeps and re-priced learned arms
+def swp(tag, city, c, tariff="inforce", db=1.0, col="s_pooled_eq"):
+    return one("T40_derived_sweep" + tag, col, city=city, c_sw=c, tariff=tariff, deadband=db)
+
+
+def rpr(arm, city, c, col="s_pooled_eq"):
+    return one("T41_ppo_repriced", col, arm=arm, city=city, seed="all", c_sw=c)
+
+
+L = "S10 tab:s-sweeps"
+SCEN = (("headline", "", "inforce", 1.0), ("tariff 2027", "", "y2027", 1.0), ("deadband 0.50", "", "inforce", 0.50),
+        ("deadband 0.75", "", "inforce", 0.75), ("deadband 1.25", "", "inforce", 1.25), ("C_th 2400", "_cth2400", "inforce", 1.0),
+        ("C_th 7200", "_cth7200", "inforce", 1.0), ("C_th 9600", "_cth9600", "inforce", 1.0), ("dt 5 min", "_dt5", "inforce", 1.0),
+        ("dt 30 min", "_dt30", "inforce", 1.0))
+vals = []
+for lab, tag, tar, db in SCEN:
+    for city in CITIES:
+        for c in DER:
+            E(L, f"TUNED {lab}, {CN[city]}, c_sw {c:g}", None, f"T40_derived_sweep{tag} [{city}, {c:g}, {tar}, db {db:g}] s_pooled_eq", S_HOW,
+              lambda tag=tag, city=city, c=c, tar=tar, db=db: swp(tag, city, c, tar, db))
+            vals.append(f"{swp(tag, city, c, tar, db):.1f}")
+for arm, lab in (("guard", "guard"), ("RBRL", "RBRL"), ("D1_latch", "D1 latch"), ("D1_ppo", "D1 on PPO"), ("NORULES", "PPO without rules")):
+    for city in CITIES:
+        for c in DER:
+            try:
+                sel("T41_ppo_repriced", arm=arm, city=city, seed="all", c_sw=c)
+            except LookupError:                       # no admissible seed in this city
+                continue
+            lo, hi = rpr(arm, city, c, "s_min"), rpr(arm, city, c, "s_max")
+            E(L, f"re-priced {lab}, {CN[city]}, c_sw {c:g} (min, max over seeds)", None, f"T41_ppo_repriced [{arm}, {city}, {c:g}] s_min, s_max",
+              "re-priced pooled equalised saving, range over seeds", lambda arm=arm, city=city, c=c: (rpr(arm, city, c, "s_min"), rpr(arm, city, c, "s_max")))
+            a, b = f"{lo:.1f}", f"{hi:.1f}"
+            vals.append((a,) if a == b else (a, b))
+fill(vals)
+
+L = "main §9.2 component ablation"
+E(L, "derived sweeps: Riyadh TUNED across capacities at 0.025 and 0.114", ("-1.1", "3.8", "4.3", "3.9", "-2.5", "11.0", "13.7", "13.3"),
+  "T40_derived_sweep{_cth2400,,_cth7200,_cth9600} [riyadh] s_pooled_eq", S_HOW,
+  lambda: tuple(swp(t, "riyadh", c) for c in DER for t in ("_cth2400", "", "_cth7200", "_cth9600")))
+E(L, "derived sweeps: comparator deadband 0.5 and 1.25 C in Riyadh (15.7, 1.6; 36.6, 5.0)", ("15.7", "1.6", "36.6", "5.0"),
+  "T40_derived_sweep [riyadh, deadband 0.5 / 1.25] s_pooled_eq", S_HOW,
+  lambda: (swp("", "riyadh", 0.025, db=0.5), swp("", "riyadh", 0.025, db=1.25), swp("", "riyadh", 0.114, db=0.5), swp("", "riyadh", 0.114, db=1.25)))
+E(L, "derived sweeps: RBRL re-priced equals the guard (Riyadh, Jeddah) and Taif range", ("1.8", "2.4", "5.0", "6.7", "2.7", "3.5", "7.6", "9.7"),
+  "T41_ppo_repriced [RBRL, guard]", "re-priced pooled equalised saving",
+  lambda: (rpr("RBRL", "riyadh", 0.025), rpr("RBRL", "jeddah", 0.025), rpr("RBRL", "riyadh", 0.114), rpr("RBRL", "jeddah", 0.114),
+           rpr("RBRL", "taif", 0.025, "s_min"), rpr("RBRL", "taif", 0.025, "s_max"), rpr("RBRL", "taif", 0.114, "s_min"), rpr("RBRL", "taif", 0.114, "s_max")))
+E(L, "derived sweeps: guard re-priced in Taif (3.5, 9.7)", ("3.5", "9.7"), "T41_ppo_repriced [guard, taif]", "re-priced pooled equalised saving",
+  lambda: (rpr("guard", "taif", 0.025), rpr("guard", "taif", 0.114)))
+L = "main §9.3 actuation step"
+E(L, "derived sweeps: TUNED at 5 min (8.1--8.5, 21.9--22.8) and 30 min (-0.5..-0.4, -1.3..-1.0)", ("8.1", "8.5", "21.9", "22.8", "-0.5", "-0.4", "-1.3", "-1.0"),
+  "T40_derived_sweep_dt5 / _dt30 s_pooled_eq", "min..max over cities",
+  lambda: (min(swp("_dt5", x, 0.025) for x in CITIES), max(swp("_dt5", x, 0.025) for x in CITIES), min(swp("_dt5", x, 0.114) for x in CITIES), max(swp("_dt5", x, 0.114) for x in CITIES),
+           min(swp("_dt30", x, 0.025) for x in CITIES), max(swp("_dt30", x, 0.025) for x in CITIES), min(swp("_dt30", x, 0.114) for x in CITIES), max(swp("_dt30", x, 0.114) for x in CITIES)))
+
 # ================================================================== abstract / conclusions
 L = "abstract + conclusions"
 E(L, "fitted deadband R1 - R2 (min..max over cities)", ("1.32", "1.36"), "T1v3_heldout [TUNED, inforce] params.on - params.off", "TUNED switch points R1 - R2 (degC)",
@@ -894,6 +948,7 @@ SECS = {
     "Riyadh cooling-season diurnal swing": ["Climate Profiles", "Generalisability"], "Jeddah diurnal swing": ["Climate Profiles", "Generalisability"],
     "fitted deadband R1 - R2": ["Conclusions"],
     "abstract: ": ["Abstract"], "derived: ": ["Headline Results at the Supported Charge"],
+    "derived sweeps: TUNED at 5 min": ["Actuation Step"], "derived sweeps: Riyadh TUNED across capacities": ["Where the MPC Margin Comes From"], "derived sweeps: ": ["Component Ablation and Sensitivity"],
     "per-window: ": ["Limitations"], "sota text: ": ["State-of-the-Art Comparison"],
     "controller class at 0.114": ["What Governs the Saving"],
     "on-commands avoided by TUNED (22--24)": ["Abstract", "Conclusions"], "TUNED electricity within": ["Conclusions"],
